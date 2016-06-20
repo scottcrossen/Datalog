@@ -3,7 +3,10 @@
 using namespace std;
 int main(){
   Debugger debug=Debugger(true);
-  debug.output("Flag 1 Reached");
+  debug.flags_on=true;
+  debug.output("Debugger class seems to be working.");
   debug.flag(1);
   debug.flags_display();
+  if(!(debug.encountered(1))) debug.flag(1);
+  debug.flags_clear();
 }
