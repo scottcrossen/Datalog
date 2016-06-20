@@ -1,5 +1,9 @@
 #include <iostream>
+#include "debugger.h"
 using namespace std;
 int main(){
-  cout << "Flag 1 Reached" << endl;
+  Debugger debug=Debugger(true);
+  debug.output("Flag 1 Reached");
+  debug.flag(1);
+  debug.flags_display();
 }
