@@ -80,6 +80,7 @@ class Debugger{
   void abort(bool conditional_met){
     if(turned_on){
       if(conditional_met){
+      	if(last_flag){ cout << endl; last_flag=false;}
 	if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Aborting. Unknown flag." << endl;
 	else cout << "Debug: Aborting. Unknown flag." << endl;
 	flags_display();
@@ -92,6 +93,7 @@ class Debugger{
   void abort(bool conditional_met, int current_flag){
     if(turned_on){
       if(conditional_met){
+      	if(last_flag){ cout << endl; last_flag=false;}
 	if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Aborting with flag:\t" << current_flag << endl;
 	else cout << "Debug: Aborting with flag:\t" << current_flag << endl;
 	flags_display();
@@ -103,6 +105,7 @@ class Debugger{
   }
   void abort(){
     if(turned_on){
+      if(last_flag){ cout << endl; last_flag=false;}
       if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Aborting. Absolute." << endl;
       else cout << "Debug: Aborting. Absolute." << endl;
       flags_display();
@@ -113,6 +116,7 @@ class Debugger{
   }
   void pause(){
     if(turned_on){
+      if(last_flag){ cout << endl; last_flag=false;}
       if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Paused. Press Enter.";
       else cout << "Debug: Paused. Press Enter." << endl;
       cin.get();
