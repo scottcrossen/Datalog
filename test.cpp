@@ -2,7 +2,7 @@
 #include "debugger.h"
 
 int main(){
-  Debugger debug=Debugger(true);
+  Debugger debug=Debugger(true, true);
   debug.output("Debugger class seems to be working.");
   debug.flag(1);
   debug.flag(2);
