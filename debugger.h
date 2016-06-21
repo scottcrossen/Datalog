@@ -22,6 +22,7 @@ class Debugger{
   }
   ~Debugger(){
     if(turned_on){
+      if(last_flag){ cout << endl; last_flag=false;}
       if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Terminated." <<endl;
       else cout << "Debug: Terminated." << endl;
     }
