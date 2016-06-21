@@ -79,8 +79,8 @@ class Debugger{
   }
   void abort(bool conditional_met){
     if(turned_on){
+      if(last_flag){ cout << endl; last_flag=false;}
       if(conditional_met){
-      	if(last_flag){ cout << endl; last_flag=false;}
 	if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Aborting. Unknown flag." << endl;
 	else cout << "Debug: Aborting. Unknown flag." << endl;
 	flags_display();
@@ -88,18 +88,26 @@ class Debugger{
 	else cout << "Debug: Terminated." << endl;
 	exit(0);
       }
+      else {
+	if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Abort condition failed." << endl;
+	else cout << "Debug: Abort condition failed." << endl;
+      }
     }
   }
   void abort(bool conditional_met, int current_flag){
     if(turned_on){
+      if(last_flag){ cout << endl; last_flag=false;}
       if(conditional_met){
-      	if(last_flag){ cout << endl; last_flag=false;}
 	if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Aborting with flag:\t" << current_flag << endl;
 	else cout << "Debug: Aborting with flag:\t" << current_flag << endl;
 	flags_display();
 	if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Terminated." <<endl;
 	else cout << "Debug: Terminated." << endl;
 	exit(0);
+      }
+      else {
+	if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m Abort condition failed." << endl;
+	else cout << "Debug: Abort condition failed." << endl;
       }
     }
   }
