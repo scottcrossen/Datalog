@@ -1,7 +1,6 @@
 #include "debugger.h"
 #include "token.h"
 #pragma once
-using namespace std;
 class Tokens{
  private:
   Debugger tokensio;

@@ -12,6 +12,9 @@ class Debugger{
   bool last_flag;
   bool editor_interface;
  public:
+  Debugger(){
+    Debugger(false, false);
+  }
   Debugger(bool editor_interface, bool turned_on){
     this->turned_on=turned_on;
     this->editor_interface=editor_interface;

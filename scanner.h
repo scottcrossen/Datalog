@@ -2,12 +2,12 @@
 #include <fstream>
 #include "tokens.h"
 #include "debugger.h"
+#include "regulars.h"
 #pragma once
-using namespace std;
-class Debugger{
+class Scanner{
  private:
   Debugger scannerio;
-  skip_ws(){};
+  void skip_ws(){};
  public:
   Scanner(){
     scannerio=Debugger(true,true);
