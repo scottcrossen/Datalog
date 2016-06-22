@@ -6,7 +6,7 @@ class Regular{
   Debugger regulario;
  public:
   Regular(){
-    regulario=Debugger(true,true);
+    regulario=Debugger("Exp");
     regulario.output("Regular expression object created.");
     regulario.flag(1);
   }

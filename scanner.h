@@ -10,7 +10,7 @@ class Scanner{
   void skip_ws(){};
  public:
   Scanner(){
-    scannerio=Debugger(true,true);
+    scannerio=Debugger("Scanner");
     scannerio.output("Scanner object created.");
     scannerio.flag(1);
     

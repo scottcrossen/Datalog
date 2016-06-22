@@ -11,10 +11,10 @@ class Token{
   TOKENTYPE type;
   string value;
   int line;
-  string token_types[EOF1+1]={"COMMA", "PERIOD", "Q_MARK", "LEFT_PAREN", "RIGHT_PAREN", "COLON", "COLON_DASH", "SCHEMES", "FACTS", "RULES", "QUERIES", "ID", "STRING", "EOF"};
+  const string token_types[EOF1+1]={"COMMA", "PERIOD", "Q_MARK", "LEFT_PAREN", "RIGHT_PAREN", "COLON", "COLON_DASH", "SCHEMES", "FACTS", "RULES", "QUERIES", "ID", "STRING", "EOF"};
  public:
   Token(TOKENTYPE type, string value, int line){
-    tokenio=Debugger(true,true);
+    tokenio=Debugger("Token");
     tokenio.output("Token object created.");
     tokenio.flag(1);
     this->type=type;

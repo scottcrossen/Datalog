@@ -7,7 +7,7 @@ class Regulars{
   vector<Regular> regular_expression_list;
  public:
   Regulars(){
-    regularsio=Debugger(true,true);
+    regularsio=Debugger("Exp A");
     regularsio.output("Regular expression array object created.");
     regularsio.flag(1);
   }

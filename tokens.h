@@ -7,12 +7,12 @@ class Tokens{
   vector<Token> token_list;
  public:
   Tokens(){
-    tokensio=Debugger(true,true);
-    tokensio.output("Tokens array object created.");
+    tokensio=Debugger("Token A");
+    tokensio.output("Token array object created.");
     tokensio.flag(1);
   }
   ~Tokens(){
-    tokensio.output("Tokens array object deconstructed.");
+    tokensio.output("Token array object deconstructed.");
     tokensio.flag(2);
   }
 };
