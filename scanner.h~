@@ -1,0 +1,20 @@
+#include <istream>
+#include <fstream>
+#include "regular.h"
+#include "debugger.h"
+#pragma once
+using namespace std;
+class Debugger{
+ private:
+  Debugger scannerio;
+ public:
+  Scanner(){
+    scannerio=Debugger(true,true);
+    scannerio.output("Scanner object created.");
+    scannerio.flag(1);
+    
+  }
+  ~Scanner(){
+    scannerio.output("Scanneer object deconstructed.");
+    scannerio.flag(2);
+};

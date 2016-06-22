@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#pragma once
 using namespace std;
 
 class Debugger{
