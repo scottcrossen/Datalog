@@ -6,17 +6,17 @@
 #pragma once
 class Scanner{
  private:
-  Debugger scannerio;
+  Debugger debug;
   void skip_ws(){};
  public:
   Scanner(){
-    scannerio=Debugger("Scanner");
-    scannerio.output("Scanner object created.");
-    scannerio.flag(1);
+    debug=Debugger("Scanner");
+    debug.output("Scanner object created.");
+    debug.flag(1);
     
   }
   ~Scanner(){
-    scannerio.output("Scanner object deconstructed.");
-    scannerio.flag(2);
+    debug.output("Scanner object deconstructed.");
+    debug.flag(2);
   }
 };

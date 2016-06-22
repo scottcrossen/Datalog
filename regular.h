@@ -3,15 +3,15 @@
 using namespace std;
 class Regular{
  private:
-  Debugger regulario;
+  Debugger debug;
  public:
   Regular(){
-    regulario=Debugger("Exp");
-    regulario.output("Regular expression object created.");
-    regulario.flag(1);
+    debug=Debugger("Exp");
+    debug.output("Regular expression object created.");
+    debug.flag(1);
   }
   ~Regular(){
-    regulario.output("Regular expression object deconstructed.");
-    regulario.flag(2);
+    debug.output("Regular expression object deconstructed.");
+    debug.flag(2);
   }
 };

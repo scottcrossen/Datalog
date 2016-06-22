@@ -3,16 +3,16 @@
 #pragma once
 class Regulars{
  private:
-  Debugger regularsio;
+  Debugger debug;
   vector<Regular> regular_expression_list;
  public:
   Regulars(){
-    regularsio=Debugger("Exp A");
-    regularsio.output("Regular expression array object created.");
-    regularsio.flag(1);
+    debug=Debugger("Exp A");
+    debug.output("Regular expression array object created.");
+    debug.flag(1);
   }
   ~Regulars(){
-    regularsio.output("Regular expression array object deconstructed.");
-    regularsio.flag(2);
+    debug.output("Regular expression array object deconstructed.");
+    debug.flag(2);
   }
 };
