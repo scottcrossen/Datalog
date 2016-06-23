@@ -38,7 +38,7 @@ class RegExp{
     debug.output("Expression correctly formatted.");
   }
   ~RegExp(){
-    debug.output("Regular expression object deconstructed.");
+    debug.output("Reg. expression object deconstructed.");
     debug.flag(2);
   }
   // Returns 0 (fail), 1 (still going), 2 (may have reached finish)
