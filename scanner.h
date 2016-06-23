@@ -1,8 +1,8 @@
 #include <istream>
 #include <fstream>
-#include "tokens.h"
+#include "tokenlist.h"
 #include "debugger.h"
-#include "regulars.h"
+#include "rules.h"
 #pragma once
 class Scanner{
  private:

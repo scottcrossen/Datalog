@@ -1,17 +1,16 @@
 #include "debugger.h"
-#include "regular.h"
+#include "regexp.h"
 #pragma once
-class Regulars{
+class ExpBuffer{
  private:
   Debugger debug;
-  vector<Regular> regular_expression_list;
  public:
-  Regulars(){
-    debug=Debugger("Exp A");
+  ExpBuffer(){
+    debug=Debugger("Buffer");
     debug.output("Regular expression array object created.");
     debug.flag(1);
   }
-  ~Regulars(){
+  ~ExpBuffer(){
     debug.output("Regular expression array object deconstructed.");
     debug.flag(2);
   }
