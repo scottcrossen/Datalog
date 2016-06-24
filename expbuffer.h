@@ -11,45 +11,41 @@ class ExpBuffer{
   string id;
  public:
   ExpBuffer(RegExp* expression, string id){
-    debug=Debugger(false,false,"Buffer");
+    debug=Debugger("Buffer");
     debug.flag(1);
     this->expression=expression;
     this->id=id;
     current_state=1;
-    debug.output("Buffer object created.");
+    debug.output(2,"Buffer object created.");
   }
   ~ExpBuffer(){
-    debug.output("Buffer object deconstructed.");
-    debug.flag(2);
+    debug.output(3,"Buffer object deconstructed.");
+  }
+  void debug_on(bool turn_on){
+    debug.flag(4);
+    debug.turned_on=turn_on;
+    debug.output(5,"Debug turned on.");
   }
   //Return 0 for fail, 1 for incomplete, 2 for complete.
   int state(){
-    debug.flag(3);
-    debug.output("state method accessed");
+    debug.flag(6);
     return current_state;
   }
   int add_char(char c){
-    debug.flag(4);
+    debug.flag(7);
     if (current_state != 0){
       charbuf+=string(1,c);
-      debug.flag(6);
-      debug.flags_display();
-      debug.flags_clear();
-      debug.output("charbuf= "+charbuf);
       current_state=(expression->check(charbuf));
-      debug.flag(7);
-      debug.flags_display();
-      debug.flags_clear();
     }
-    debug.output("Added Char");
+    debug.flag(8);
     return current_state;
   }
   void reset(){
-    debug.flag(5);
+    debug.flag(9);
     charbuf=string();
     current_state=1;
-    debug.output("Reset");
+    debug.flag(10);
   }
-  string get_id(){return id;}
-  string get_string(){return charbuf;}
+  string get_id(){debug.flag(11); return id;}
+  string get_string(){debug.flag(12); return charbuf;}
 };

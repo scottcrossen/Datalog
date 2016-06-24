@@ -1,6 +1,6 @@
 Flags=-Wall
 Source=NULL
-main=NULL
+Main=main.cpp
 Test=test.cpp
 Output=program
 CC=g++

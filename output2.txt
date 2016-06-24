@@ -1,0 +1,9 @@
+(PERIOD,".",2)
+(COMMA,",",3)
+(STRING,"'a string'",3)
+(SCHEMES,"Schemes",6)
+(ID,"SchemesFactsRules",7)
+(COLON,":",7)
+(COLON_DASH,":-",8)
+(EOF," ",8)
+Total Tokens = 8

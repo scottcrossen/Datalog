@@ -10,22 +10,33 @@ class TokenList{
   vector<Token> token_list;
  public:
   TokenList(){
-    debug=Debugger(false,false,"Token A");
-    debug.output("Token array object created.");
-    debug.flag(1);
+    debug=Debugger("Token A");
+    debug.output(1,"Token array object created.");
   }
   ~TokenList(){
-    debug.output("Token array object deconstructed.");
-    debug.flag(2);
+    debug.output(2,"Token array object deconstructed.");
+  }
+  void debug_on(bool turn_on){
+    debug.flag(3);
+    debug.turned_on=turn_on;
+    for(unsigned iter=0; iter < token_list.size(); iter++){
+      token_list[iter].debug_on(turn_on);
+    }
+    debug.output(4,"Debug turned on.");
   }
   void add(Token my_token){
+    debug.flag(5);
     token_list.push_back(my_token);
+    debug.flag(6);
   }
   void add(vector<Token> my_tokens){
+    debug.flag(7);
     for(unsigned iter=0; iter< my_tokens.size(); iter++)
       token_list.push_back(my_tokens[iter]);
+    debug.flag(8);
   }
   string print_out(){
+    debug.flag(9);
     stringstream output;
     unsigned iter=0;
     for(iter=0; iter < token_list.size(); iter++){
@@ -36,7 +47,9 @@ class TokenList{
     return output.str();
   }
   void remove_redundant(){
+    debug.flag(10);
     for(unsigned iter=0; iter< token_list.size(); iter++){
+      debug.flag(11);
       if(token_list[iter].value==":-"){
 	for(unsigned iter2=iter; iter2 >=0 ; iter2--){
 	  if(token_list[iter2].value==":"){
@@ -45,14 +58,21 @@ class TokenList{
 	  }
 	}
       }
-      if(token_list[iter].type=="STRING"){
+      if(token_list[iter].type=="ID"){
 	for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
-	  if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "STRING"){
+	  if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
 	    token_list.erase(token_list.begin()+iter);
 	    break;
 	  }
 	}
       }
     }
+    debug.flag(12);
+  }
+  void clear(){
+    debug.flag(13);
+    for(unsigned iter=0; token_list.size() >0; iter++)
+      token_list.pop_back();
+    debug.output(14, "Tokens Cleared.");
   }
 };

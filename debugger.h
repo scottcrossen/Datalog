@@ -4,15 +4,15 @@
 #include <stdlib.h>
 #pragma once
 using namespace std;
-const bool debug_on=true;
+const bool debug_on=false;
 const bool editor=true;
 class Debugger{
  private:
   vector<int> flags;
-  bool turned_on;
   bool editor_interface;
   string object_name;
  public:
+  bool turned_on;
   Debugger(){}
   Debugger(string object_name){
     this->turned_on=debug_on;
@@ -54,6 +54,25 @@ class Debugger{
       for(unsigned i=0; i < flags.size(); i++)
 	cout << flags[i] << " ";
       cout << endl;
+      flags_clear();
+    }
+  }
+  void flags_display(int add_flag){
+    if(turned_on){
+      flag(add_flag);
+      if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m \033[1;31m"+object_name+":\033[0m\tDisplaying flags found:\t";
+      else cout << "Debug: "+object_name+":\tDisplaying flags found:\t";
+      for(unsigned i=0; i < flags.size(); i++)
+	cout << flags[i] << " ";
+      cout << endl;
+      flags_clear();
+    }
+  }
+  void output(int add_flag, string current_output){
+    if(turned_on){
+      flag(add_flag);
+      if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m \033[1;31m"+object_name+":\033[0m\tStatus line:\t\t" << current_output << endl;
+      else cout << "Debug: "+object_name+":\tStatus line:\t\t" << current_output << endl;
     }
   }
   void output(string current_output){
@@ -64,7 +83,7 @@ class Debugger{
   }
   void flags_clear(){
     if(turned_on){
-      for (unsigned i=0; i <= flags.size(); i++) flags.pop_back();
+      for (unsigned i=0; flags.size() >0; i++) flags.pop_back();
       if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m \033[1;31m"+object_name+":\033[0m\tFlags cleared." << endl;
       else cout << "Debug: "+object_name+":\tFlags cleared." << endl;
     }

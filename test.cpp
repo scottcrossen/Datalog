@@ -26,7 +26,12 @@ int main(){
 
   Scanner scanner=Scanner();
   scanner.initialize();
+  scanner.debug_on(true);
+  scanner.input_file("./test1.txt");
+  scanner.output_file("./output1.txt");
   scanner.read_in();
+  scanner.write_out();
+  scanner.clear_tokens();
   debug.output("End of main reached.");
   return 0;
 }

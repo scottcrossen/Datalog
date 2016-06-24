@@ -11,23 +11,27 @@ class Token{
   string value;
   int line;
   Token(string type, string value, int line){
-    debug=Debugger(false,false,"Token");
+    debug=Debugger("Token");
     debug.flag(1);
     this->type=type;
     this->value=value;
     this->line=line;
-    debug.flag(4);
-    debug.output("Token object created.");
+    debug.output(2,"Token object created.");
   }
   ~Token(){
-    debug.flag(2);
-    debug.output("Token object deconstructed.");
+    debug.output(3,"Token object deconstructed.");
+  }
+  void debug_on(bool turn_on){
+    debug.flag(4);
+    debug.turned_on=turn_on;
+    debug.output(5,"Debug turned on.");
   }
   string display(){
-    debug.flag(3);
+    debug.flag(6);
     stringstream output;
     output << "(" << type << "," <<"\""<< value<<"\"" <<"," << line << ")";
     debug.output("Token display method accessed.");
+    debug.flag(7);
     return output.str();
   }
 };
