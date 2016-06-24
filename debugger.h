@@ -83,7 +83,7 @@ class Debugger{
   }
   void flags_clear(){
     if(turned_on){
-      for (unsigned i=0; i <= flags.size(); i++) flags.pop_back();
+      for (unsigned i=0; flags.size() >0; i++) flags.pop_back();
       if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m \033[1;31m"+object_name+":\033[0m\tFlags cleared." << endl;
       else cout << "Debug: "+object_name+":\tFlags cleared." << endl;
     }
