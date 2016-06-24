@@ -45,14 +45,18 @@ class TokenList{
 	  }
 	}
       }
-      if(token_list[iter].type=="STRING"){
+      if(token_list[iter].type=="ID"){
 	for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
-	  if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "STRING"){
+	  if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
 	    token_list.erase(token_list.begin()+iter);
 	    break;
 	  }
 	}
       }
     }
+  }
+  void clear(){
+    for(unsigned iter=0; token_list.size() >0; iter++)
+      token_list.pop_back();
   }
 };

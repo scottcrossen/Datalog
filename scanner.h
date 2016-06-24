@@ -1,4 +1,4 @@
-#include <istream>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -17,12 +17,13 @@ class Scanner{
   string output_name;
  public:
   Scanner(){
-    debug=Debugger("Scanner");
+    debug=Debugger(false,false,"Scanner");
     debug.flag(1);
     rules=Rules();
     token_list=TokenList();
     debug.output("Scanner object created.");
-    output_name="./output.txt";
+    input_name="test1.txt";
+    output_name="output.txt";
   }
   ~Scanner(){
     debug.flag(2);
@@ -46,15 +47,15 @@ class Scanner{
     debug.output("Initialize method accessed.");
   }
   void read_in(){
-    stringstream file_in;
-    file_in << ",.():-'' ' yo' .,lOl2";
+    ifstream file_in;
+    file_in.open(input_name.c_str());
+    if ((file_in.fail())) {file_in.close(); return;}
     int state=1; // 1 reading, 2 string, 3 comment
     string found_string;
     int line_string;
     unsigned line=1;
     while(!(file_in.eof())){
       char char_c=file_in.get();
-      cout << char_c;
       if (char_c=='\n') line++;
       if (char_c=='\377'){ token_list.add(rules.save_reset(line)); debug.output("End of file encountered.");}
       else if (char_c =='#' && state==1) state=3;
@@ -68,8 +69,10 @@ class Scanner{
       token_list.add(Token("ERROR","Unterminated String",line_string));
     }
     token_list.add(Token("EOF"," ",line));
-    //token_list.remove_redundant();
+    token_list.remove_redundant();
     debug.output("Output of file:\n"+token_list.print_out());
+    file_in.close();
+    return;
   }
   void input_file(string filename){
     this->input_name=filename;
@@ -82,5 +85,12 @@ class Scanner{
   }
   void write_out(){
     debug.flag(4);
+    ofstream file_out;
+    file_out.open(output_name.c_str());
+    file_out << token_list.print_out();
+    file_out.close();
+  }
+  void clear_tokens(){
+    token_list.clear();
   }
 };
