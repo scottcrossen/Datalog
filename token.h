@@ -11,7 +11,7 @@ class Token{
   string value;
   int line;
   Token(string type, string value, int line){
-    debug=Debugger(false,false,"Token");
+    debug=Debugger("Token");
     debug.flag(1);
     this->type=type;
     this->value=value;
@@ -22,6 +22,9 @@ class Token{
   ~Token(){
     debug.flag(2);
     debug.output("Token object deconstructed.");
+  }
+  void debug_on(bool turn_on){
+    debug.turned_on=turn_on;
   }
   string display(){
     debug.flag(3);

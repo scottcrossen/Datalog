@@ -12,7 +12,7 @@ class Rules{
   vector<ExpBuffer*> buffer_list;
  public:
   Rules(){
-    debug=Debugger(false,false,"Rules");
+    debug=Debugger("Rules");
     debug.output("Rules object created.");
   }
   ~Rules(){
@@ -26,6 +26,11 @@ class Rules{
       debug.flag(5);
     }
     debug.output("Rules object deconstructed.");
+  }
+  void debug_on(bool turn_on){
+    debug.turned_on=turn_on;
+    for (unsigned it=0; it < buffer_list.size(); it++) buffer_list[it]->debug_on(turn_on);
+    for (unsigned it=0; it < regular_expression_list.size(); it++) regular_expression_list[it]->debug_on(turn_on);
   }
   void add_exp(string expression, string token){
     debug.flag(3);

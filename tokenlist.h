@@ -10,13 +10,19 @@ class TokenList{
   vector<Token> token_list;
  public:
   TokenList(){
-    debug=Debugger(false,false,"Token A");
+    debug=Debugger("Token A");
     debug.output("Token array object created.");
     debug.flag(1);
   }
   ~TokenList(){
     debug.output("Token array object deconstructed.");
     debug.flag(2);
+  }
+  void debug_on(bool turn_on){
+    debug.turned_on=turn_on;
+    for(unsigned iter=0; iter < token_list.size(); iter++){
+      token_list[iter].debug_on(turn_on);
+    }    
   }
   void add(Token my_token){
     token_list.push_back(my_token);

@@ -11,7 +11,7 @@ class ExpBuffer{
   string id;
  public:
   ExpBuffer(RegExp* expression, string id){
-    debug=Debugger(false,false,"Buffer");
+    debug=Debugger("Buffer");
     debug.flag(1);
     this->expression=expression;
     this->id=id;
@@ -21,6 +21,9 @@ class ExpBuffer{
   ~ExpBuffer(){
     debug.output("Buffer object deconstructed.");
     debug.flag(2);
+  }
+  void debug_on(bool turn_on){
+    debug.turned_on=turn_on;
   }
   //Return 0 for fail, 1 for incomplete, 2 for complete.
   int state(){

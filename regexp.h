@@ -11,7 +11,7 @@ class RegExp{
  public:
   RegExp(string expression){
     this->expression=expression;
-    debug=Debugger(false,false,"Exp");
+    debug=Debugger("Exp");
     debug.output("Regular expression object created.");
     debug.flag(1);
     for(unsigned iter1=0; iter1 < expression.size(); iter1++){
@@ -40,6 +40,9 @@ class RegExp{
   ~RegExp(){
     debug.output("Reg. expression object deconstructed.");
     debug.flag(2);
+  }
+  void debug_on(bool turn_on){
+    debug.turned_on=turn_on;
   }
   // Returns 0 (fail), 1 (still going), 2 (may have reached finish)
   int check(string current_word){

@@ -17,7 +17,7 @@ class Scanner{
   string output_name;
  public:
   Scanner(){
-    debug=Debugger(false,false,"Scanner");
+    debug=Debugger("Scanner");
     debug.flag(1);
     rules=Rules();
     token_list=TokenList();
@@ -28,6 +28,11 @@ class Scanner{
   ~Scanner(){
     debug.flag(2);
     debug.output("Scanner object deconstructed.");
+  }
+  void debug_on(bool turn_on){
+    debug.turned_on=turn_on;
+    token_list.debug_on(turn_on);
+    rules.debug_on(turn_on);
   }
   void initialize(){
     debug.flag(3);
