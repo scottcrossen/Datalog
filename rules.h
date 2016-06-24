@@ -10,6 +10,18 @@ class Rules{
   Debugger debug;
   vector<RegExp*> regular_expression_list;
   vector<ExpBuffer*> buffer_list;
+  void cycle_add_all(vector<Token> &output, char &char_c, int line, bool &reset_time){
+    for (unsigned it=0; it < buffer_list.size(); it++){
+      debug.flag(9);
+      if (buffer_list[it]->state() ==2){
+	if (buffer_list[it]->add_char(char_c) == 0) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string().substr(0,buffer_list[it]->get_string().size()-1), line));
+      }
+      if (buffer_list[it]->state() ==1){
+	buffer_list[it]->add_char(char_c);
+      }
+      if(buffer_list[it]->state() != 0) reset_time=false;
+    }
+}
  public:
   Rules(){
     debug=Debugger("Rules");
@@ -46,16 +58,7 @@ class Rules{
     vector<Token> output;
     for(unsigned iter=0;iter<=1;++iter){
       bool reset_time=true;
-      for (unsigned it=0; it < buffer_list.size(); it++){
-	debug.flag(9);
-	if (buffer_list[it]->state() ==2){
-	  if (buffer_list[it]->add_char(char_c) == 0) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string().substr(0,buffer_list[it]->get_string().size()-1), line));
-	}
-	if (buffer_list[it]->state() ==1){
-	  buffer_list[it]->add_char(char_c);
-	}
-	if(buffer_list[it]->state() != 0) reset_time=false;
-      }
+      cycle_add_all(output, char_c, line, reset_time);
       debug.flag(10);
       if(reset_time==true){
 	if(iter==0) reset();

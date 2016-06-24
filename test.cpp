@@ -3,35 +3,41 @@
 #include "scanner.h"
 
 int main(){
+  cout << "Program Compiled Successfully." << endl;
   Debugger debug=Debugger("Main");
   debug.flag(1);
-  /*
-  RegExp newexp=RegExp("AAA*");
-  debug.flags_clear();
-  debug.output("checking condition 1");
-  debug.flag(newexp.check("A"));
-  debug.output("checking condition 2");
-  debug.flag(newexp.check("AA"));
-  debug.output("checking condition 3");
-  debug.flag(newexp.check("AAA"));
-  debug.output("checking condition 4");
-  debug.flag(newexp.check("AAAA"));
-  debug.output("checking condition 5");
-  debug.flag(newexp.check("AAAB"));
-  debug.output("checking condition 6");
-  debug.flag(newexp.check("AABB"));
-  debug.flags_display();
-  debug.flags_clear();*/
-  
-
   Scanner scanner=Scanner();
-  scanner.initialize();
   scanner.debug_on(true);
+  scanner.initialize();
+  debug.flag(2);
   scanner.input_file("./test1.txt");
   scanner.output_file("./output1.txt");
   scanner.read_in();
   scanner.write_out();
+  debug.output(3, "Test 1 output:");
+  scanner.print();
   scanner.clear_tokens();
-  debug.output("End of main reached.");
+  scanner.input_file("./test2.txt");
+  scanner.output_file("./output2.txt");
+  scanner.read_in();
+  scanner.write_out();
+  debug.output(4, "Test 2 output:");
+  scanner.print();
+  scanner.clear_tokens();
+  scanner.input_file("./test3.txt");
+  scanner.output_file("./output3.txt");
+  scanner.read_in();
+  scanner.write_out();
+  debug.output(5, "Test 3 output:");
+  scanner.print();
+  scanner.clear_tokens();
+  scanner.input_file("./test4.txt");
+  scanner.output_file("./output4.txt");
+  scanner.read_in();
+  scanner.write_out();
+  debug.output(6, "Test 4 output:");
+  scanner.print();
+  scanner.clear_tokens();
+  debug.output(7,"End of main reached.");
   return 0;
 }

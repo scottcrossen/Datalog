@@ -8,6 +8,26 @@ class TokenList{
  private:
   Debugger debug;
   vector<Token> token_list;
+  void check_colondash(unsigned iter){
+    if(token_list[iter].value==":-"){
+      for(unsigned iter2=iter; iter2 >=0 ; iter2--){
+	if(token_list[iter2].value==":"){
+	  token_list.erase(token_list.begin()+iter2);
+	  break;
+	}
+      }
+    }
+  }
+  void check_id(unsigned iter){
+    if(token_list[iter].type=="ID"){
+      for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
+	if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
+	  token_list.erase(token_list.begin()+iter);
+	  break;
+	}
+      }
+    }
+  }
  public:
   TokenList(){
     debug=Debugger("Token A");
@@ -50,22 +70,8 @@ class TokenList{
     debug.flag(10);
     for(unsigned iter=0; iter< token_list.size(); iter++){
       debug.flag(11);
-      if(token_list[iter].value==":-"){
-	for(unsigned iter2=iter; iter2 >=0 ; iter2--){
-	  if(token_list[iter2].value==":"){
-	    token_list.erase(token_list.begin()+iter2);
-	    break;
-	  }
-	}
-      }
-      if(token_list[iter].type=="ID"){
-	for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
-	  if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
-	    token_list.erase(token_list.begin()+iter);
-	    break;
-	  }
-	}
-      }
+      check_colondash(iter);
+      check_id(iter);
     }
     debug.flag(12);
   }
