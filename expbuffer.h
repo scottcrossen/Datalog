@@ -10,7 +10,7 @@ class ExpBuffer{
   string charbuf;
   string id;
  public:
-  ExpBuffer(RegExp *expression, string id){
+  ExpBuffer(RegExp* expression, string id){
     debug=Debugger(false,false,"Buffer");
     debug.flag(1);
     this->expression=expression;
@@ -31,8 +31,15 @@ class ExpBuffer{
   int add_char(char c){
     debug.flag(4);
     if (current_state != 0){
-      charbuf+=c;
-      current_state=expression->check(charbuf);
+      charbuf+=string(1,c);
+      debug.flag(6);
+      debug.flags_display();
+      debug.flags_clear();
+      debug.output("charbuf= "+charbuf);
+      current_state=(expression->check(charbuf));
+      debug.flag(7);
+      debug.flags_display();
+      debug.flags_clear();
     }
     debug.output("Added Char");
     return current_state;
@@ -44,4 +51,5 @@ class ExpBuffer{
     debug.output("Reset");
   }
   string get_id(){return id;}
+  string get_string(){return charbuf;}
 };

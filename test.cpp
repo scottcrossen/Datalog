@@ -5,9 +5,8 @@
 int main(){
   Debugger debug=Debugger("Main");
   debug.flag(1);
-  Scanner scanner=Scanner();
-  scanner.initialize();
-  RegExp newexp=RegExp("AAA*A");
+  /*
+  RegExp newexp=RegExp("AAA*");
   debug.flags_clear();
   debug.output("checking condition 1");
   debug.flag(newexp.check("A"));
@@ -22,7 +21,12 @@ int main(){
   debug.output("checking condition 6");
   debug.flag(newexp.check("AABB"));
   debug.flags_display();
-  debug.flags_clear();
+  debug.flags_clear();*/
+  
+
+  Scanner scanner=Scanner();
+  scanner.initialize();
+  scanner.read_in();
   debug.output("End of main reached.");
   return 0;
 }

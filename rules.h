@@ -1,6 +1,7 @@
 #include "debugger.h"
 #include "regexp.h"
 #include "expbuffer.h"
+#include "token.h"
 #include <vector>
 #include <string>
 #pragma once
@@ -28,27 +29,37 @@ class Rules{
   }
   void add_exp(string expression, string token){
     debug.flag(3);
-    regular_expression_list.push_back(new RegExp(expression));
-    buffer_list.push_back(new ExpBuffer(*regular_expression_list.end(),token));
+    RegExp* new_exp=new RegExp(expression);
+    regular_expression_list.push_back(new_exp);
+    debug.output("Expression added: "+expression+" with token: "+token);
+    buffer_list.push_back(new ExpBuffer(new_exp,token));
     debug.output("add_exp method accessed.");
   }
-  vector<string> add_char(char char_c){
+  vector<Token> add_char(char char_c, int line){
     debug.flag(4);
-    vector<string> output;
-    bool reset_time=true;
-    for (unsigned it=0; it < buffer_list.size(); it++){
-      debug.flag(5);
-      if (buffer_list[it]->state() ==2){
-	debug.flag(6);
-	if (buffer_list[it]->add_char(char_c) == 0) output.push_back(buffer_list[it]->get_id());
-	else reset_time=false;
+    vector<Token> output;
+    for(unsigned iter=0;iter<=1;++iter){
+      bool reset_time=true;
+      for (unsigned it=0; it < buffer_list.size(); it++){
+	debug.flag(5);
+	if (buffer_list[it]->state() ==2){
+	  debug.flag(6);
+	  if (buffer_list[it]->add_char(char_c) == 0) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string().substr(0,buffer_list[it]->get_string().size()-1), line));
+	}
+	if (buffer_list[it]->state() ==1){
+	  debug.flag(9);
+	  buffer_list[it]->add_char(char_c);
+	  debug.flag(12);
+	}
+	debug.flag(10);
+	if(buffer_list[it]->state() != 0) reset_time=false;
       }
-      if (buffer_list[it]->state() ==1){
-	if(buffer_list[it]->add_char(char_c) != 0) reset_time=false;
-      }
+      debug.flag(7);
+      if(reset_time==true){
+	if(iter==0) reset();
+	else if(iter==1){ cout << "+"<< char_c <<"+"<< endl; output.push_back(Token("ERROR","Unknown Character",line)); debug.flag(10);}
+      } else iter++;
     }
-    debug.flag(7);
-    if(reset_time==true) reset();
     debug.output("Added Char");
     return output;
   }
@@ -56,5 +67,15 @@ class Rules{
     debug.flag(8);
     for (unsigned it=0; it < buffer_list.size(); it++) buffer_list[it]->reset();
     debug.output("Reset");
+  }
+  vector<Token> save_reset(int line){
+    debug.flag(8);
+    vector<Token> output;
+    for (unsigned it=0; it < buffer_list.size(); it++){
+      if(buffer_list[it]->state()==2) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string(), line));
+      buffer_list[it]->reset();
     }
+    debug.output("Reset & Saved");
+    return output;
+  }
 };

@@ -11,7 +11,7 @@ class RegExp{
  public:
   RegExp(string expression){
     this->expression=expression;
-    debug=Debugger("Exp");
+    debug=Debugger(false,false,"Exp");
     debug.output("Regular expression object created.");
     debug.flag(1);
     for(unsigned iter1=0; iter1 < expression.size(); iter1++){
@@ -45,12 +45,15 @@ class RegExp{
   int check(string current_word){
     debug.flags_clear();
     debug.flag(9);
+    debug.flags_display();
+    debug.flags_clear();
     unsigned string_spot=0;
     for (list<string>::iterator it=sequence.begin(); it !=sequence.end(); ++it){
       debug.output("comparing "+*it+" with "+current_word.substr(string_spot,1)+".");
       bool fail=false;
       if(*it=="*"){
-	*it--; debug.flag(18);
+	*it--;
+	debug.flag(18);
       debug.output("Changing. Comparing "+*it+" with "+current_word.substr(string_spot,1)+".");
       }
       if(*it == " "){
@@ -62,6 +65,20 @@ class RegExp{
 	if(string_spot < current_word.size()){
 	  debug.flag(19);
 	  if(current_word.at(string_spot) < 65 || (current_word.at(string_spot) >90)){fail=true; debug.flag(10);}
+	  } else fail=true;
+      }
+      else if(*it == "[A-Za-z]" || *it == "[a-zA-Z]" ){
+	debug.flag(20);
+	if(string_spot < current_word.size()){
+	  debug.flag(19);
+	  if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122)){fail=true; debug.flag(10);}
+	  } else fail=true;
+      }
+      else if(*it == "[A-Za-z0-9]" || *it == "[a-zA-Z0-9]" || *it == "[0-9A-Za-z]" || *it == "[0-9a-zA-Z]" ){
+	debug.flag(20);
+	if(string_spot < current_word.size()){
+	  debug.flag(19);
+	  if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122) && (current_word.at(string_spot) < 48 || current_word.at(string_spot) >57)){fail=true; debug.flag(10);}
 	  } else fail=true;
       }
       else if(*it != current_word.substr(string_spot,1)){fail=true; debug.flag(11);}

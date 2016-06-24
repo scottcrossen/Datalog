@@ -6,12 +6,12 @@
 class Token{
  private:
   Debugger debug;
+ public:
   string type;
   string value;
   int line;
- public:
   Token(string type, string value, int line){
-    debug=Debugger("Token");
+    debug=Debugger(false,false,"Token");
     debug.flag(1);
     this->type=type;
     this->value=value;
@@ -26,7 +26,7 @@ class Token{
   string display(){
     debug.flag(3);
     stringstream output;
-    output << "(" << type << "," << value <<"," << line << ")";
+    output << "(" << type << "," <<"\""<< value<<"\"" <<"," << line << ")";
     debug.output("Token display method accessed.");
     return output.str();
   }
