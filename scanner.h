@@ -70,7 +70,8 @@ class Scanner{
     }
     token_list.add(Token("EOF"," ",line));
     token_list.remove_redundant();
-    debug.output(12,"File read in. Tokens:\n"+token_list.print_out());
+    debug.output(12, "File read in. Use print() method to view on console");
+    //debug.output(12,"File read in. Tokens:\n"+token_list.print_out());
     file_in.close();
     return;
   }

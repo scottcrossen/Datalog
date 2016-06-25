@@ -7,7 +7,7 @@ int main(int argc, char* argv[]){
   string output_file;
   
   if (argc>3 || argc <3){
-    cout << "Only " << argc << " arguments supplied, Usage is <file_in> <file_out>" << endl;
+    cout << "Only " << argc-1 << " arguments supplied, Usage is <file_in> <file_out>" << endl;
     exit(0);
   } else {
     input_file=string(argv[1]);

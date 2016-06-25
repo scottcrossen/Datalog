@@ -46,7 +46,7 @@ class Rules{
       debug.flag(10);
       if(reset_time==true){
 	if(iter==0) reset();
-	else if(iter==1){ cout << "+"<< char_c <<"+"<< endl; output.push_back(Token("ERROR","Unknown Character",line)); debug.flag(10);}
+	else if(iter==1){output.push_back(Token("ERROR","Unknown Character",line)); debug.flag(10);}
       } else iter++;
     }
     debug.flag(11);
@@ -55,7 +55,8 @@ class Rules{
   void reset(){
     debug.flag(12);
     for (unsigned it=0; it < buffer_list.size(); it++) buffer_list[it]->reset();
-    debug.output(13,"Reset");
+    debug.flag(13);
+    //debug.output(13,"Reset");
   }
   vector<Token> save_reset(int line){
     debug.flag(14);
@@ -64,7 +65,8 @@ class Rules{
       if(buffer_list[it]->state()==2) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string(), line));
       buffer_list[it]->reset();
     }
-    debug.output(15,"Reset & Saved");
+    debug.flag(15);
+    //debug.output(15,"Reset & Saved");
     return output;
   }
  private:
