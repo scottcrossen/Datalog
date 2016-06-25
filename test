@@ -99,7 +99,7 @@ int main(){
   //scanner.print();
   scanner.clear_tokens();
 
-  scanner.input_file("./test62.txt");
+  scanner.input_file("./in62.txt");
   scanner.output_file("./output62.txt");
   scanner.read_in();
   scanner.write_out();
