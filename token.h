@@ -4,8 +4,6 @@
 #pragma once
 
 class Token{
- private:
-  Debugger debug;
  public:
   string type;
   string value;
@@ -34,4 +32,6 @@ class Token{
     debug.flag(7);
     return output.str();
   }
+ private:
+  Debugger debug;
 };

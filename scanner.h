@@ -9,12 +9,6 @@
 #include "token.h"
 #pragma once
 class Scanner{
- private:
-  Debugger debug;
-  Rules rules;
-  TokenList token_list;
-  string input_name;
-  string output_name;
  public:
   Scanner(){
     debug=Debugger("Scanner");
@@ -67,13 +61,10 @@ class Scanner{
       char char_c=file_in.get();
       if (char_c=='\n') line++;
       if (char_c=='\377'){ token_list.add(rules.save_reset(line)); debug.output(11,"End of file encountered.");}
-      else if (char_c =='#' && state==1) state=3;
-      else if (char_c =='\n' && state == 3) state=1;
-      else if (char_c =='\'' && state==1){ state=2; token_list.add(rules.save_reset(line)); line_string=line;}
-      else if (char_c == '\'' && state==2){state=1;token_list.add(Token("STRING","'"+found_string+"'",line));}
-      else if (state == 2) found_string+=char_c;
-      else if (char_c != ' ' && char_c !='\t' && char_c !='\n' && state==1) token_list.add(rules.add_char(char_c,line));
+      else{
+	proccess_char(char_c, line, line_string, found_string, state);
       }
+    }
     if( state==2){debug.output("Error: Unterminated string");
       token_list.add(Token("ERROR","Unterminated String",line_string));
     }
@@ -110,5 +101,34 @@ class Scanner{
     debug.flag(21);
     token_list.clear();
     debug.output(22,"Tokens Cleared.");
+  }
+ private:
+  Debugger debug;
+  Rules rules;
+  TokenList token_list;
+  string input_name;
+  string output_name;
+  void proccess_char(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
+    switch(state){
+    case 1: case1(char_c, line, line_string, found_string, state);
+      break;
+    case 2: case2(char_c, line, line_string, found_string, state);
+      break;
+    case 3: case3(char_c, line, line_string, found_string, state);
+      break;
+    }
+  }
+  void case1(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
+    if (char_c =='#') state=3;
+    else if (char_c =='\''){ state=2; token_list.add(rules.save_reset(line)); line_string=line;}
+    else if (char_c != '\377' && char_c != ' ' && char_c !='\t' && char_c !='\n') token_list.add(rules.add_char(char_c,line));
+  }
+  void case2(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
+    found_string+=char_c;
+    if (char_c == '\''){state=1;token_list.add(Token("STRING","'"+found_string+"'",line));}
+
+  }
+  void case3(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
+    if (char_c =='\n') state=1;
   }
 };

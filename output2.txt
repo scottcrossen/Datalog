@@ -1,6 +1,6 @@
 (PERIOD,".",2)
 (COMMA,",",3)
-(STRING,"'a string'",3)
+(STRING,"'a string''",3)
 (SCHEMES,"Schemes",6)
 (ID,"SchemesFactsRules",7)
 (COLON,":",7)

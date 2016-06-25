@@ -4,10 +4,6 @@
 #pragma once
 using namespace std;
 class RegExp{
- private:
-  Debugger debug;
-  list<string> sequence;
-  string expression;
  public:
   RegExp(string expression){
     this->expression=expression;
@@ -45,43 +41,54 @@ class RegExp{
       debug.flag(9);
       //debug.output(10,"comparing "+*it+" with "+current_word.substr(string_spot,1)+".");
       bool fail=false;
-      if(*it=="*"){
-	*it--;
-	//debug.output(11,"comparing "+*it+" with "+current_word.substr(string_spot,1)+".");
-      }
-      if(*it == " "){
-	if (string_spot >= current_word.size()) return 2;
-      }
-      if(*it == "[A-Z]"){
-	if(string_spot < current_word.size()){
-	  if(current_word.at(string_spot) < 65 || (current_word.at(string_spot) >90)) fail=true;
-	  } else fail=true;
-      }
-      else if(*it == "[A-Za-z]" || *it == "[a-zA-Z]" ){
-	if(string_spot < current_word.size()){
-	  if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122)) fail=true;
-	  } else fail=true;
-      }
-      else if(*it == "[A-Za-z0-9]" || *it == "[a-zA-Z0-9]" || *it == "[0-9A-Za-z]" || *it == "[0-9a-zA-Z]" ){
-	if(string_spot < current_word.size()){
-	  if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122) && (current_word.at(string_spot) < 48 || current_word.at(string_spot) >57)) fail=true;
-	  } else fail=true;
-      }
-      else if(*it != current_word.substr(string_spot,1)) fail=true; 
+      if(*it=="*") *it--;
+      if(*it == " " && string_spot >= current_word.size()) return 2;
+      compare_current(it,string_spot, current_word, fail);
       debug.flag(12);
-      if(fail==true){
-	if(*(++it)=="*"){
-	  if(string_spot >= current_word.size())
-	    return 2;
-	  string_spot--;
-	}
-	else if(string_spot >= current_word.size())
-	  return 1;
-	else return 0;
-      }
+      int ret_int=check_failed(fail,it,string_spot,current_word);
+      if (ret_int !=-1) return ret_int; // remove this line when pasting above function in.
       string_spot++;
     }
     debug.flag(13);
     return 2;
+  }
+ private:
+  Debugger debug;
+  list<string> sequence;
+  string expression;
+  void compare_current(list<string>::iterator &it, unsigned &string_spot, string &current_word, bool &fail){
+    if(*it == "[A-Z]") is_az(string_spot, current_word, fail);
+    else if(*it == "[A-Za-z]" || *it == "[a-zA-Z]" ) is_azaz(string_spot, current_word, fail);
+    else if(*it == "[A-Za-z0-9]" || *it == "[a-zA-Z0-9]")
+      is_azaz09(string_spot, current_word, fail);
+    else if(*it != current_word.substr(string_spot,1)) fail=true; 
+}
+  void is_az(unsigned &string_spot, string &current_word, bool &fail){
+    if(string_spot < current_word.size()){
+      if(current_word.at(string_spot) < 65 || (current_word.at(string_spot) >90)) fail=true;
+    } else fail=true;
+  }
+  void is_azaz(unsigned &string_spot, string &current_word, bool &fail){
+    if(string_spot < current_word.size()){
+      if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122)) fail=true;
+    } else fail=true;
+  }
+  void is_azaz09(unsigned &string_spot, string &current_word, bool &fail){
+    if(string_spot < current_word.size()){
+      if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122) && (current_word.at(string_spot) < 48 || current_word.at(string_spot) >57)) fail=true;
+    } else fail=true;
+}
+  int check_failed(bool &fail, list<string>::iterator &it, unsigned &string_spot, string &current_word){
+    if(fail==true){
+      if(*(++it)=="*"){
+	if(string_spot >= current_word.size())
+	  return 2;
+	string_spot--;
+      }
+      else if(string_spot >= current_word.size())
+	return 1;
+      else return 0;
+    }
+    return -1; //remove this when pasting back in.
   }
 };
