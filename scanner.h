@@ -121,13 +121,12 @@ class Scanner{
   }
   void case1(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
     if (char_c =='#') state=3;
-    else if (char_c =='\''){ state=2; token_list.add(rules.save_reset(line)); line_string=line;}
+    else if (char_c =='\''){ state=2; token_list.add(rules.save_reset(line)); line_string=line; found_string="";}
     else if (char_c != '\377' && char_c != ' ' && char_c !='\t' && char_c !='\n') token_list.add(rules.add_char(char_c,line));
   }
   void case2(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
     found_string+=char_c;
-    if (char_c == '\''){state=1;token_list.add(Token("STRING","'"+found_string+"'",line));}
-
+    if (char_c == '\''){state=1; token_list.add(Token("STRING","'"+found_string+"'",line));}
   }
   void case3(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
     if (char_c =='\n') state=1;
