@@ -38,7 +38,7 @@ class TokenList{
     unsigned iter=0;
     for(iter=0; iter < token_list.size(); iter++){
       if(token_list[iter].type != "ERROR") output << token_list[iter].display() << endl;
-      else{output << "Input Error on line " << token_list[iter].line; break;}
+      else{output << "Input Error on line " << token_list[iter].line << endl; break;}
     }
     if(iter==token_list.size()) output<< "Total Tokens = " << token_list.size();
     return output.str();
