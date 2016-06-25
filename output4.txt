@@ -1,3 +1,4 @@
+(COLON,":",1)
 (COLON_DASH,":-",1)
 (ID,"scott2scott2scRulesme",2)
 (STRING,"'    '",4)

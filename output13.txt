@@ -1,2 +1,2 @@
-(STRING,"'good string'",4)
-Input Error on line 6
+(STRING,"'good string'",5)
+Input Error on line 7

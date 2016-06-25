@@ -56,10 +56,9 @@ class Scanner{
     string found_string;
     int line_string;
     unsigned line=1;
-    char char_c=file_in.get();
     while(!(file_in.eof())){
       debug.flag(10);
-      char_c=file_in.get();
+      char char_c=file_in.get();
       if (char_c=='\n') line++;
       if (char_c=='\377'){ token_list.add(rules.save_reset(line)); debug.output(11,"End of file encountered.");}
       else{
@@ -111,9 +110,8 @@ class Scanner{
   string input_name;
   string output_name;
   void proccess_char(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
+    if (state ==0 && char_c != '\n' && char_c != '\t' && char_c != ' ') {rules.reset(line); state=1;}
     switch(state){
-    case 0:
-      if (char_c != '\n' && char_c != '\t' && char_c != ' ') {rules.reset(line); state=1;} else break;
     case 1: case1(char_c, line, line_string, found_string, state);
       break;
     case 2: case2(char_c, line, line_string, found_string, state);

@@ -1,4 +1,4 @@
-(ID,"chemes",1)
+(SCHEMES,"Schemes",1)
 (COLON,":",1)
 (ID,"f",2)
 (LEFT_PAREN,"(",2)
