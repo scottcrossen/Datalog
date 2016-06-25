@@ -1,0 +1,3 @@
+(ID,"bobjoe42",10)
+(EOF," ",10)
+Total Tokens = 2
