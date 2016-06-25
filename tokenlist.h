@@ -40,7 +40,7 @@ class TokenList{
       if(token_list[iter].type != "ERROR") output << token_list[iter].display() << endl;
       else{output << "Input Error on line " << token_list[iter].line << endl; break;}
     }
-    if(iter==token_list.size()) output<< "Total Tokens = " << token_list.size();
+    if(iter==token_list.size()) output<< "Total Tokens = " << token_list.size() <<endl;
     return output.str();
   }
   void remove_redundant(){
