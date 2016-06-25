@@ -68,7 +68,7 @@ class Scanner{
     if( state==2){debug.output("Error: Unterminated string");
       token_list.add(Token("ERROR","Unterminated String",line_string));
     }
-    token_list.add(Token("EOF"," ",line));
+    token_list.add(Token("EOF","",line));
     token_list.remove_redundant();
     debug.output(12, "File read in. Use print() method to view on console");
     //debug.output(12,"File read in. Tokens:\n"+token_list.print_out());

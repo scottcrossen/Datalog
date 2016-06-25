@@ -34,7 +34,7 @@ class Rules{
     debug.flag(6);
     RegExp* new_exp=new RegExp(expression);
     regular_expression_list.push_back(new_exp);
-    buffer_list.push_back(new ExpBuffer(new_exp,token));
+    buffer_list.push_back(new ExpBuffer(new_exp,token,0));
     debug.output(7,"Expression added: "+expression+" with token: "+token);
   }
   vector<Token> add_char(char char_c, int line){
@@ -45,16 +45,16 @@ class Rules{
       cycle_add_all(output, char_c, line, reset_time);
       debug.flag(10);
       if(reset_time==true){
-	if(iter==0) reset();
+	if(iter==0) reset(line);
 	else if(iter==1){output.push_back(Token("ERROR","Unknown Character",line)); debug.flag(10);}
       } else iter++;
     }
     debug.flag(11);
     return output;
   }
-  void reset(){
+  void reset(int line){
     debug.flag(12);
-    for (unsigned it=0; it < buffer_list.size(); it++) buffer_list[it]->reset();
+    for (unsigned it=0; it < buffer_list.size(); it++) buffer_list[it]->reset(line);
     debug.flag(13);
     //debug.output(13,"Reset");
   }
@@ -62,8 +62,8 @@ class Rules{
     debug.flag(14);
     vector<Token> output;
     for (unsigned it=0; it < buffer_list.size(); it++){
-      if(buffer_list[it]->state()==2) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string(), line));
-      buffer_list[it]->reset();
+      if(buffer_list[it]->state()==2) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string(), buffer_list[it]->get_line()));
+      buffer_list[it]->reset(line);
     }
     debug.flag(15);
     //debug.output(15,"Reset & Saved");
@@ -77,7 +77,7 @@ class Rules{
     for (unsigned it=0; it < buffer_list.size(); it++){
       debug.flag(9);
       if (buffer_list[it]->state() ==2){
-	if (buffer_list[it]->add_char(char_c) == 0) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string().substr(0,buffer_list[it]->get_string().size()-1), line));
+	if (buffer_list[it]->add_char(char_c) == 0) output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string().substr(0,buffer_list[it]->get_string().size()-1), buffer_list[it]->get_line()));
       }
       if (buffer_list[it]->state() ==1){
 	buffer_list[it]->add_char(char_c);

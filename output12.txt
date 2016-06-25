@@ -1,5 +1,5 @@
-(COLON_DASH,":-",7)
+(COLON_DASH,":-",8)
 (COLON,":",7)
-(COLON,":",10)
-(EOF," ",10)
+(COLON,":",7)
+(EOF,"",10)
 Total Tokens = 4
