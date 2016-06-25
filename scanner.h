@@ -126,7 +126,7 @@ class Scanner{
   }
   void case2(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
     found_string+=char_c;
-    if (char_c == '\''){state=1; token_list.add(Token("STRING","'"+found_string+"'",line));}
+    if (char_c == '\''){state=1; token_list.add(Token("STRING","'"+found_string,line));}
   }
   void case3(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
     if (char_c =='\n') state=1;
