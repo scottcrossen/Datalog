@@ -5,29 +5,6 @@
 #include <vector>
 #pragma once
 class TokenList{
- private:
-  Debugger debug;
-  vector<Token> token_list;
-  void check_colondash(unsigned iter){
-    if(token_list[iter].value==":-"){
-      for(unsigned iter2=iter; iter2 >=0 ; iter2--){
-	if(token_list[iter2].value==":"){
-	  token_list.erase(token_list.begin()+iter2);
-	  break;
-	}
-      }
-    }
-  }
-  void check_id(unsigned iter){
-    if(token_list[iter].type=="ID"){
-      for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
-	if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
-	  token_list.erase(token_list.begin()+iter);
-	  break;
-	}
-      }
-    }
-  }
  public:
   TokenList(){
     debug=Debugger("Token A");
@@ -80,5 +57,28 @@ class TokenList{
     for(unsigned iter=0; token_list.size() >0; iter++)
       token_list.pop_back();
     debug.output(14, "Tokens Cleared.");
+  }
+ private:
+  Debugger debug;
+  vector<Token> token_list;
+  void check_colondash(unsigned iter){
+    if(token_list[iter].value==":-"){
+      for(unsigned iter2=iter; iter2 >=0 ; iter2--){
+	if(token_list[iter2].value==":"){
+	  token_list.erase(token_list.begin()+iter2);
+	  break;
+	}
+      }
+    }
+  }
+  void check_id(unsigned iter){
+    if(token_list[iter].type=="ID"){
+      for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
+	if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
+	  token_list.erase(token_list.begin()+iter);
+	  break;
+	}
+      }
+    }
   }
 };

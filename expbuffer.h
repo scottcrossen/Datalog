@@ -3,12 +3,6 @@
 #include <string>
 #pragma once
 class ExpBuffer{
- private:
-  Debugger debug;
-  RegExp* expression;
-  int current_state;
-  string charbuf;
-  string id;
  public:
   ExpBuffer(RegExp* expression, string id){
     debug=Debugger("Buffer");
@@ -48,4 +42,10 @@ class ExpBuffer{
   }
   string get_id(){debug.flag(11); return id;}
   string get_string(){debug.flag(12); return charbuf;}
+ private:
+  Debugger debug;
+  RegExp* expression;
+  int current_state;
+  string charbuf;
+  string id;
 };
