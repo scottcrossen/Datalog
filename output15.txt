@@ -1,4 +1,4 @@
-(SCHEMES,"Schemes",3)
-(ID,"SchemesFactsRulesQueries",3)
+(SCHEMES,"Schemes",5)
+(ID,"SchemesFactsRulesQueries",5)
 (EOF,"",11)
 Total Tokens = 3

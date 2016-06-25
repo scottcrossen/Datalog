@@ -110,7 +110,7 @@ class Scanner{
   string input_name;
   string output_name;
   void proccess_char(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
-    if (state ==0 && char_c != '\n' && char_c != '\t' && char_c != ' ') {rules.reset(line); state=1;}
+    if (state ==0 && char_c != '\n' && char_c != '\t' && char_c != ' ') {token_list.add(rules.save_reset(line)); state=1;}
     switch(state){
     case 1: case1(char_c, line, line_string, found_string, state);
       break;
@@ -127,9 +127,9 @@ class Scanner{
   }
   void case2(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
     found_string+=char_c;
-    if (char_c == '\''){state=1; token_list.add(Token("STRING","'"+found_string,line));}
+    if (char_c == '\''){state=0; token_list.add(Token("STRING","'"+found_string,line));}
   }
   void case3(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
-    if (char_c =='\n') state=1;
+    if (char_c =='\n') state=0;
   }
 };
