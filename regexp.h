@@ -57,12 +57,18 @@ class RegExp{
   list<string> sequence;
   string expression;
   void compare_current(list<string>::iterator &it, unsigned &string_spot, string &current_word, bool &fail){
-    if(*it == "[A-Z]") is_az(string_spot, current_word, fail);
+    if(*it =="[ ]") is_space(string_spot, current_word, fail);
+    else if(*it == "[A-Z]") is_az(string_spot, current_word, fail);
     else if(*it == "[A-Za-z]" || *it == "[a-zA-Z]" ) is_azaz(string_spot, current_word, fail);
     else if(*it == "[A-Za-z0-9]" || *it == "[a-zA-Z0-9]")
       is_azaz09(string_spot, current_word, fail);
     else if(*it != current_word.substr(string_spot,1)) fail=true; 
 }
+  void is_space(unsigned &string_spot, string &current_word, bool &fail){
+    if(string_spot < current_word.size()){
+      if(current_word.at(string_spot) != ' ' || current_word.at(string_spot) != '\t' || current_word.at(string_spot) != '\n') fail=true;
+    } else fail=true;
+  }
   void is_az(unsigned &string_spot, string &current_word, bool &fail){
     if(string_spot < current_word.size()){
       if(current_word.at(string_spot) < 65 || (current_word.at(string_spot) >90)) fail=true;

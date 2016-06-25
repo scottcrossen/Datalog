@@ -1,5 +1,6 @@
 (COLON,":",1)
 (COLON_DASH,":-",1)
-(ID,"scott2scott2scRulesme",2)
+(ID,"scott2scott2",2)
+(ID,"scRulesme",3)
 (STRING,"'    '",4)
 Input Error on line 5

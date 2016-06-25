@@ -1,3 +1,4 @@
-(ID,"bobjoe42",5)
+(ID,"bob",5)
+(ID,"joe42",7)
 (EOF,"",10)
-Total Tokens = 2
+Total Tokens = 3

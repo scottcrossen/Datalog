@@ -124,6 +124,7 @@ class Scanner{
     if (char_c =='#') state=3;
     else if (char_c =='\''){ state=2; token_list.add(rules.save_reset(line)); line_string=line; found_string="";}
     else if (char_c != '\377' && char_c != ' ' && char_c !='\t' && char_c !='\n') token_list.add(rules.add_char(char_c,line));
+    else {token_list.add(rules.save_reset(line)); state=0;}
   }
   void case2(char &char_c, unsigned &line, int &line_string, string &found_string, int &state){
     found_string+=char_c;
