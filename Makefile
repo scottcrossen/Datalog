@@ -9,6 +9,6 @@ CC=g++
 .PHONY: test $(Output) clean
 
 all:
-	$(CC) $(Flags) -o $(Output) $(Main) && ./$(Output) $(Source) && pmccabe *.h *.cpp && valgrind --leak-check=full ./$(Output) $(Source)
+	$(CC) $(Flags) -o $(Output) $(Main) && pmccabe *.h *.cpp && valgrind --leak-check=full ./$(Output) $(Source)
 test:
-	mv ./$(Test) ./$(Test).cpp && $(CC) $(Flags) -o $(Output) $(Test).cpp && ./$(Output) && pmccabe *.h *.cpp && valgrind --leak-check=full ./$(Output) && mv ./$(Test).cpp ./$(Test)
+	mv ./$(Test) ./$(Test).cpp && $(CC) $(Flags) -o $(Output) $(Test).cpp && pmccabe *.h *.cpp && valgrind --leak-check=full ./$(Output) && mv ./$(Test).cpp ./$(Test)
