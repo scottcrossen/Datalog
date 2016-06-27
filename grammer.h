@@ -24,9 +24,19 @@ class Grammer{
     debug.turned_on=turn_on;
     debug.output(5,"Debug turned on.");
   }
-  vector<string> return_equiv(){ return equiv;}
+  void set_terminals(vector<string> terminals){
+    debug.flag(6);
+    this->terminals=terminals;
+    debug.flag(7);
+  }
+  vector<string> get_terminals(){
+    debug.flag(8);
+    return terminals;
+  }
+  vector<string> get_equiv(){ return equiv;}
  private:
   Debugger debug;
   string keyword;
   vector<string> equiv;
+  vector<string> terminals;
 };

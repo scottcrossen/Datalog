@@ -1,6 +1,9 @@
 #include "debugger.h"
 #include "regexp.h"
 #include <string>
+#define FAILED 0
+#define INCOMPLETE 1
+#define COMPLETE 2
 #pragma once
 class ExpBuffer{
  public:
@@ -10,7 +13,7 @@ class ExpBuffer{
     this->expression=expression;
     this->id=id;
     this->starting_line=starting_line;
-    current_state=1;
+    current_state=INCOMPLETE;
     debug.output(2,"Buffer object created.");
   }
   ~ExpBuffer(){
@@ -38,7 +41,7 @@ class ExpBuffer{
   void reset(int line){
     debug.flag(9);
     charbuf=string();
-    current_state=1;
+    current_state=INCOMPLETE;
     starting_line=line;
     debug.flag(10);
   }
