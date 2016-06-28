@@ -1,21 +1,21 @@
 #include <iostream>
 #include "debugger.h"
 #include "scanner.h"
-#include "parser.h"
+//#include "parser.h"
 using namespace std;
 int main(){
   cout << "Program Compiled Successfully." << endl;
   Debugger debug=Debugger("Main");
   debug.flag(1);
-  //Scanner scanner=Scanner();
-  //scanner.debug_on(true);
-  //scanner.initialize();
-  //debug.flag(2);
+  Scanner scanner=Scanner();
+  scanner.debug_on(true);
+  scanner.initialize();
+  debug.flag(2);
   
-  Grammer grammer=Grammer("yo","yo1 yo2 yo3");
-  grammer.debug_on(true);
+  //Grammer grammer=Grammer("yo","yo1 yo2 yo3");
+  //grammer.debug_on(true);
 
-/*
+
   scanner.input_file("./test_cases/in20.txt");
   scanner.output_file("./test_cases/output20.txt");
   scanner.read_in();
@@ -110,7 +110,15 @@ int main(){
   scanner.write_out();
   //debug.output(6, "Test 62 output:");
   //scanner.print();
-  scanner.clear_tokens(); */
+  scanner.clear_tokens();
+
+  scanner.input_file("./input.txt");
+  scanner.output_file("./output.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 62 output:");
+  //scanner.print();
+  scanner.clear_tokens();
 
   debug.output(7,"End of main reached.");
   return 0;
