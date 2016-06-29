@@ -1,7 +1,8 @@
 #include <iostream>
 #include "debugger.h"
 #include "scanner.h"
-
+//#include "parser.h"
+using namespace std;
 int main(){
   cout << "Program Compiled Successfully." << endl;
   Debugger debug=Debugger("Main");
@@ -10,15 +11,18 @@ int main(){
   scanner.debug_on(true);
   scanner.initialize();
   debug.flag(2);
+  
+  //Grammer grammer=Grammer("yo","yo1 yo2 yo3");
+  //grammer.debug_on(true);
 
-  scanner.input_file("./test_cases/in1.txt");
-  scanner.output_file("./test_cases/output1.txt");
+  scanner.input_file("./test_cases/in20.txt");
+  scanner.output_file("./test_cases/output20.txt");
   scanner.read_in();
   scanner.write_out();
-  //debug.output(3, "Test 1 output:");
+  //debug.output(3, "Test 20 output:");
   //scanner.print();
   scanner.clear_tokens();
-
+  
   scanner.input_file("./test_cases/in2.txt");
   scanner.output_file("./test_cases/output2.txt");
   scanner.read_in();
@@ -104,6 +108,14 @@ int main(){
   scanner.read_in();
   scanner.write_out();
   //debug.output(6, "Test 62 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./input.txt");
+  scanner.output_file("./output.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test input output:");
   //scanner.print();
   scanner.clear_tokens();
 
