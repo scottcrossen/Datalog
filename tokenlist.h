@@ -24,12 +24,15 @@ class TokenList{
   void add(Token my_token){
     debug.flag(5);
     token_list.push_back(my_token);
-    debug.flag(6);
+    //debug.output(6,"Token Added: "+my_token.value);
+    //debug.flag(6);
   }
   void add(vector<Token> my_tokens){
     debug.flag(7);
-    for(unsigned iter=0; iter< my_tokens.size(); iter++)
+    for(unsigned iter=0; iter< my_tokens.size(); iter++){
       token_list.push_back(my_tokens[iter]);
+      //debug.output(6,"Token Added: "+my_tokens[iter].value);
+    }
     debug.flag(8);
   }
   string print_out(){
