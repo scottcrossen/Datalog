@@ -1,2 +1,7 @@
+(COLON_DASH,":-",4)
 (COLON,":",5)
-Input Error on line 5
+(Q_MARK,"?",7)
+(PERIOD,".",7)
+(STRING,"'lol'",7)
+(EOF,"",11)
+Total Tokens = 6

@@ -63,6 +63,8 @@ class Scanner{
     while(!(file_in.eof())){
       debug.flag(10);
       char char_c=file_in.get();
+      //debug.output(state, "Processing char: '"+string(1,char_c)+"'" );
+      //debug.flags_display();
       if (char_c=='\n') line++;
       if (char_c=='\377'){ token_list.add(rules.save_reset(line)); debug.output(11,"End of file encountered.");}
       else{

@@ -15,7 +15,6 @@ int main(){
   //Grammer grammer=Grammer("yo","yo1 yo2 yo3");
   //grammer.debug_on(true);
 
-
   scanner.input_file("./test_cases/in20.txt");
   scanner.output_file("./test_cases/output20.txt");
   scanner.read_in();
@@ -116,7 +115,7 @@ int main(){
   scanner.output_file("./output.txt");
   scanner.read_in();
   scanner.write_out();
-  //debug.output(6, "Test 62 output:");
+  //debug.output(6, "Test input output:");
   //scanner.print();
   scanner.clear_tokens();
 
