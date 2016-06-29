@@ -51,7 +51,8 @@ class TokenList{
     for(unsigned iter=0; iter< token_list.size(); iter++){
       debug.flag(11);
       check_colondash(iter);
-      check_id(iter);
+      check_id1(iter);
+      check_id2(iter);
     }
     debug.flag(12);
   }
@@ -74,11 +75,21 @@ class TokenList{
       }
     }
   }
-  void check_id(unsigned iter){
+  void check_id1(unsigned iter){
     if(token_list[iter].type=="ID"){
       for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
 	if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
 	  token_list.erase(token_list.begin()+iter);
+	  break;
+	}
+      }
+    }
+  }
+  void check_id2(unsigned iter){
+    if(token_list[iter].type=="ID" && iter>=1){
+      for(unsigned iter2=(iter-1); iter2 >=0; --iter2){
+	if(token_list[iter2].line == token_list[iter].line && token_list[iter].value.find(token_list[iter2].value) ==0){
+	  token_list.erase(token_list.begin()+iter2);
 	  break;
 	}
       }

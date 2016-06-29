@@ -37,14 +37,15 @@ class RegExp{
   }
   // Returns 0 (fail), 1 (still going), 2 (may have reached finish)
   int check(string current_word){
+    debug.turned_on=true;
     debug.flag(8);
     unsigned string_spot=0;
-    for (unsigned iter=0; iter <sequence.size(); iter++){
+    for (unsigned iter=0; iter <sequence.size(); ++iter){
       //for (list<string>::iterator it=sequence.begin(); it !=sequence.end(); ++it){
       debug.flag(9);
-      //debug.output(10,"comparing "+*it+" with "+current_word.substr(string_spot,1)+".");
+      debug.output(10,"comparing "+current_word.substr(string_spot,1)+" with "+sequence[iter]+" from "+expression);
       bool fail=false;
-      if(sequence[iter]=="*") iter--;
+      if(sequence[iter]=="*"){ iter--; debug.output(10,"comparing "+current_word.substr(string_spot,1)+" with "+sequence[iter]+" from "+expression);}
       //if(*it=="*") *it--;
       if(sequence[iter]== " " && string_spot >= current_word.size()) return COMPLETE;
       //if(*it == " " && string_spot >= current_word.size()) return COMPLETE;
@@ -96,8 +97,8 @@ class RegExp{
     //int check_failed(bool &fail, list<string>::iterator &it, unsigned &string_spot, string &current_word){
     if(fail==true){
       if(iter+1==sequence.size()) return FAILED;
-      if(sequence[iter++]=="*"){
-	if(string_spot >= current_word.size())
+      if(sequence[++iter]=="*"){
+	if(string_spot+1 >= current_word.size())
 	  return COMPLETE;
 	string_spot--;
       }
