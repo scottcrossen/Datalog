@@ -90,7 +90,7 @@ class TokenList{
   void check_id2(unsigned &iter){
     if(token_list[iter].type=="ID" && iter>=1){
       for(int iter2=iter-1; iter2 >=0; --iter2){
-	if(token_list[iter2].line == token_list[iter].line && token_list[iter].value.size() > token_list[iter2].value.size() && token_list[iter].value.find(token_list[iter2].value) == 0){
+	if(token_list[iter2].line == token_list[iter].line && token_list[iter].value.size() > token_list[iter2].value.size() && token_list[iter2].type != "ID" && token_list[iter].value.find(token_list[iter2].value) == 0){
 	  token_list.erase(token_list.begin()+iter2);
 	  iter--;
 	  break;

@@ -1,0 +1,12 @@
+(COLON,":",1)
+(COLON_DASH,":-",1)
+(COMMA,",",2)
+(ID,"s",2)
+(COMMA,",",2)
+(COMMA,",",2)
+(ID,"sc",2)
+(RIGHT_PAREN,")",2)
+(ID,"scott2scott2",2)
+(ID,"scRulesme",3)
+(STRING,"'    '",4)
+Input Error on line 5

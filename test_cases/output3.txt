@@ -1,2 +1,1 @@
-(EOF,"",1)
-Total Tokens = 1
+Input Error on line 0
