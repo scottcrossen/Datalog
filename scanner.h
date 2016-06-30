@@ -55,7 +55,12 @@ class Scanner{
     debug.flag(9);
     ifstream file_in;
     file_in.open(input_name.c_str());
-    if ((file_in.fail())) {file_in.close(); return;}
+    if ((file_in.fail())) {
+      file_in.close();
+      token_list.add(Token("ERROR","Incorrect filename",0));
+      debug.output("Incorrect filename encountered.");
+      return;
+    }
     int state=SPACES;
     string found_string;
     int line_string;

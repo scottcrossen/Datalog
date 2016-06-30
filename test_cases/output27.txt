@@ -1,0 +1,10 @@
+(SCHEMES,"Schemes",5)
+(COLON,":",5)
+(FACTS,"Facts",7)
+(COLON,":",7)
+(RULES,"Rules",9)
+(COLON,":",9)
+(QUERIES,"Queries",11)
+(COLON,":",11)
+(EOF,"",14)
+Total Tokens = 9
