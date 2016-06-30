@@ -65,31 +65,34 @@ class TokenList{
  private:
   Debugger debug;
   vector<Token> token_list;
-  void check_colondash(unsigned iter){
+  void check_colondash(unsigned &iter){
     if(token_list[iter].value==":-"){
-      for(unsigned iter2=iter; iter2 >=0 ; iter2--){
+      for(int iter2=iter-1; iter2 >=0 ; iter2--){
 	if(token_list[iter2].value==":"){
 	  token_list.erase(token_list.begin()+iter2);
+	  iter--;
 	  break;
 	}
       }
     }
   }
-  void check_id1(unsigned iter){
+  void check_id1(unsigned &iter){
     if(token_list[iter].type=="ID"){
       for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
 	if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
 	  token_list.erase(token_list.begin()+iter);
+	  if (iter2 <iter) iter--;
 	  break;
 	}
       }
     }
   }
-  void check_id2(unsigned iter){
+  void check_id2(unsigned &iter){
     if(token_list[iter].type=="ID" && iter>=1){
-      for(unsigned iter2=(iter-1); iter2 >=0; --iter2){
-	if(token_list[iter2].line == token_list[iter].line && token_list[iter].value.find(token_list[iter2].value) ==0){
+      for(int iter2=iter-1; iter2 >=0; --iter2){
+	if(token_list[iter2].line == token_list[iter].line && token_list[iter].value.size() > token_list[iter2].value.size() && token_list[iter].value.find(token_list[iter2].value) == 0){
 	  token_list.erase(token_list.begin()+iter2);
+	  iter--;
 	  break;
 	}
       }

@@ -76,13 +76,9 @@ class Rules{
   void cycle_add_all(vector<Token> &output, char &char_c, int line, bool &reset_time){
     for (unsigned it=0; it < buffer_list.size(); it++){
       debug.flag(9);
-      debug.turned_on=true;
-      if (buffer_list[it]->get_id() =="ID" && buffer_list[it]->state()==1) debug.output("ID is in state 1");
       if (buffer_list[it]->state() ==2){
-	if (buffer_list[it]->get_id() =="ID") debug.output("ID is in state 2");
 	if (buffer_list[it]->add_char(char_c) == 0){
 	  output.push_back(Token(buffer_list[it]->get_id(), buffer_list[it]->get_string().substr(0,buffer_list[it]->get_string().size()-1), buffer_list[it]->get_line()));
-	  if (buffer_list[it]->get_id() =="ID") debug.output("ID is in state 0");
 	}
       }
       if (buffer_list[it]->state() ==1){

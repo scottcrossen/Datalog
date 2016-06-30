@@ -37,7 +37,7 @@ class RegExp{
   }
   // Returns 0 (fail), 1 (still going), 2 (may have reached finish)
   int check(string current_word){
-    debug.turned_on=true;
+    //debug_on(true);
     debug.flag(8);
     unsigned string_spot=0;
     for (unsigned iter=0; iter <sequence.size(); ++iter){
@@ -98,7 +98,7 @@ class RegExp{
     if(fail==true){
       if(iter+1==sequence.size()) return FAILED;
       if(sequence[++iter]=="*"){
-	if(string_spot+1 >= current_word.size())
+	if(string_spot >= current_word.size())
 	  return COMPLETE;
 	string_spot--;
       }

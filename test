@@ -15,8 +15,8 @@ int main(){
   //Grammer grammer=Grammer("yo","yo1 yo2 yo3");
   //grammer.debug_on(true);
 
-  scanner.input_file("./test_cases/in20.txt");
-  scanner.output_file("./test_cases/output20.txt");
+  scanner.input_file("./test_cases/in1.txt");
+  scanner.output_file("./test_cases/output1.txt");
   scanner.read_in();
   scanner.write_out();
   //debug.output(3, "Test 20 output:");
@@ -92,6 +92,86 @@ int main(){
   scanner.read_in();
   scanner.write_out();
   //debug.output(6, "Test 15 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in20.txt");
+  scanner.output_file("./test_cases/output20.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(3, "Test 20 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in21.txt");
+  scanner.output_file("./test_cases/output21.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 21 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in22.txt");
+  scanner.output_file("./test_cases/output22.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 22 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in23.txt");
+  scanner.output_file("./test_cases/output23.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 23 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in24.txt");
+  scanner.output_file("./test_cases/output24.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 24 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in25.txt");
+  scanner.output_file("./test_cases/output25.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 25 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in26.txt");
+  scanner.output_file("./test_cases/output26.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(3, "Test 25 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in27.txt");
+  scanner.output_file("./test_cases/output27.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 26 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in28.txt");
+  scanner.output_file("./test_cases/output28.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 27 output:");
+  //scanner.print();
+  scanner.clear_tokens();
+
+  scanner.input_file("./test_cases/in29.txt");
+  scanner.output_file("./test_cases/output29.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(6, "Test 28 output:");
   //scanner.print();
   scanner.clear_tokens();
 
