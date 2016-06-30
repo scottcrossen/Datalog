@@ -38,6 +38,9 @@ class Parser{
     grammer_list.add_grammer("parameterList","epsilon");
     grammer_list.add_grammer("parameter","STRING");
     grammer_list.add_grammer("parameter","ID");
+    grammer_list.add_grammer("epsilon","EPSILON");
+    grammer_list.build_terminal_list();
+    //debug.output(11,"Grammers:\n"+grammer_list.print());
     debug.flag(4);
   }
   void read_in(TokenList token_list){
@@ -47,14 +50,27 @@ class Parser{
   }
   void check_syntax(){
     debug.flag(7);
-    void recur_check_syn(int token){
-      for (int iter=0; iter < grammer_list.size() iter++){
-	//THIS WONT WORK. INFINITE RECURSION IF ALLOWED DEPTH >1
-      }
+    vector<Tokens> tokens=token_list;
+    GrammerList grammers=grammer_list;
+    bool fail=false;
+    while(tokens.size() !=0 && !(fail)){
+      
     }
     debug.flag(8);
   }
+  void debug_on(bool turn_on){
+    debug.flag(9);
+    debug.turned_on=turn_on;
+    grammer_list.debug_on(turn_on);
+    token_list.debug_on(turn_on);
+    debug.output(10,"Debug turned on.");
+  }
  private:
+  void recur_check_syn(int token){
+    for (int iter=0; iter < grammer_list.size(); iter++){
+      //THIS WONT WORK. INFINITE RECURSION IF ALLOWED DEPTH >1
+    }
+  }
   Debugger debug;
   GrammerList grammer_list;
   TokenList token_list;

@@ -3,10 +3,11 @@
 class Grammer{
  public:
   Grammer(string keyword, string equivalence){
-    debug=Debugger(true,true,"Grammer");
+    debug=Debugger("Grammer");
     debug.flag(1);
     unsigned last_space=0;
     unsigned iter;
+    this->keyword=keyword;
     for(iter=0; iter < equivalence.length(); iter++)
       if(equivalence.substr(iter,1) ==" "){
 	equiv.push_back(equivalence.substr(last_space, iter-last_space));
@@ -33,7 +34,14 @@ class Grammer{
     debug.flag(8);
     return terminals;
   }
-  vector<string> get_equiv(){ return equiv;}
+  vector<string> get_equiv(){
+    debug.flag(9);
+    return equiv;
+  }
+  string get_keyword(){
+    debug.flag(10);
+    return keyword;
+  }
  private:
   Debugger debug;
   string keyword;

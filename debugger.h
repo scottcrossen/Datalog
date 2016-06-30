@@ -13,7 +13,9 @@ class Debugger{
   string object_name;
  public:
   bool turned_on;
-  Debugger(){}
+  Debugger(){
+    this->turned_on=false;
+  }
   Debugger(string object_name){
     this->turned_on=debug_on;
     this->editor_interface=editor;
