@@ -4,6 +4,7 @@
 #include "grammerlist.h"
 #include "programobject.h"
 #include <stack>
+#include <set>
 #pragma once
 class Parser{
  public:
@@ -17,11 +18,11 @@ class Parser{
   }
   void initialize(){
     debug.flag(3);
-    grammer_list.add_grammer("datalogProgram","SCHEMES COLON scheme schemeList datalogProgram");
-    grammer_list.add_grammer("datalogProgram","FACTS COLON factList datalogProgram");
-    grammer_list.add_grammer("datalogProgram","RULES COLON ruleList datalogProgram");
-    grammer_list.add_grammer("datalogProgram","QUERIES COLON query queryList datalogProgram");
-    grammer_list.add_grammer("datalogProgram","epsilon");
+    grammer_list.add_grammer("datalogProgram","datalogSchemes datalogFacts datalogRules datalogQueries");
+    grammer_list.add_grammer("datalogSchemes","SCHEMES COLON scheme schemeList");
+    grammer_list.add_grammer("datalogFacts","FACTS COLON factList");
+    grammer_list.add_grammer("datalogRules","RULES COLON ruleList");
+    grammer_list.add_grammer("datalogQueries","QUERIES COLON query queryList");
     grammer_list.add_grammer("schemeList","scheme schemeList");
     grammer_list.add_grammer("schemeList","epsilon");
     grammer_list.add_grammer("factList","fact factList");
@@ -67,25 +68,27 @@ class Parser{
     }
     else{
       output << "Success!"<< endl;
-      set<string> schemes;
+      vector<string> schemes;
       program.find_print("scheme", schemes);
       output << "Schemes("<<schemes.size()<<"):"<<endl;
-      for(set<string>::iterator iter=schemes.begin(); iter != schemes.end(); iter++)
+      for(vector<string>::iterator iter=schemes.begin(); iter != schemes.end(); iter++)
 	output << "  " << (*iter) <<endl;
-      set<string> facts;
+      vector<string> facts;
       program.find_print("fact", facts);
       output << "Facts("<<facts.size()<<"):"<<endl;
-      for(set<string>::iterator iter=facts.begin(); iter != facts.end(); iter++)
+      for(vector<string>::iterator iter=facts.begin(); iter != facts.end(); iter++)
 	output << "  " << (*iter).substr(0,(*iter).size()-1)<<endl;
-      set<string> rules;
+      vector<string> rules;
       program.find_print("rule", rules);
       output << "Rules("<<rules.size()<<"):"<<endl;
-      for(set<string>::iterator iter=rules.begin(); iter != rules.end(); iter++)
+      for(vector<string>::iterator iter=rules.begin(); iter != rules.end(); iter++){
+	handle_semicolon_dash(iter);
 	output << "  " << (*iter).substr(0,(*iter).size()-1)<<endl;
-      set<string> queries;
+      }
+      vector<string> queries;
       program.find_print("query", queries);
       output << "Queries("<<queries.size()<<"):"<<endl;
-      for(set<string>::iterator iter=queries.begin(); iter != queries.end(); iter++)
+      for(vector<string>::iterator iter=queries.begin(); iter != queries.end(); iter++)
 	output << "  " << (*iter).substr(0,(*iter).size()-1)<<endl;
       set<string> domain;
       program.find_print("STRING", domain);
@@ -153,6 +156,11 @@ class Parser{
     debug.output(8,"Program syntax built.");
   }
  private:
+  void handle_semicolon_dash(vector<string>::iterator &iter){
+    unsigned exception=(*iter).substr(0,(*iter).size()-1).find(":-");
+    if(exception >=0 && exception<(*iter).size()-2)
+      *(iter)=(*(iter)).substr(0,exception)+" :- "+(*(iter)).substr(exception+2,((*iter)).size()-(exception+2));
+  }
   void syntax(Token error){
     program.clear();
     program.type="Syntax";
