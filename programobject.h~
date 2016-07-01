@@ -1,0 +1,8 @@
+#include <vector>
+#pragma once
+class ProgramObject{
+ public:
+  string type;
+ private:
+  vector<ProgramObject> children;
+};

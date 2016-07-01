@@ -2,6 +2,8 @@
 #include "tokenlist.h"
 #include "token.h"
 #include "grammerlist.h"
+#include "programobject.h"
+#include <stack>
 #pragma once
 class Parser{
  public:
@@ -15,15 +17,16 @@ class Parser{
   }
   void initialize(){
     debug.flag(3);
-    grammer_list.add_grammer("datalogProgram","SCHEMES COLON scheme schemeList");
-    grammer_list.add_grammer("datalogProgram","FACTS COLON factList");
-    grammer_list.add_grammer("datalogProgram","RULES COLON ruleList");
-    grammer_list.add_grammer("datalogProgram","QUERIES COLON query queryList");
+    grammer_list.add_grammer("datalogProgram","SCHEMES COLON scheme schemeList datalogProgram");
+    grammer_list.add_grammer("datalogProgram","FACTS COLON factList datalogProgram");
+    grammer_list.add_grammer("datalogProgram","RULES COLON ruleList datalogProgram");
+    grammer_list.add_grammer("datalogProgram","QUERIES COLON query queryList datalogProgram");
+    grammer_list.add_grammer("datalogProgram","epsilon");
     grammer_list.add_grammer("schemeList","scheme schemeList");
     grammer_list.add_grammer("schemeList","epsilon");
     grammer_list.add_grammer("factList","fact factList");
     grammer_list.add_grammer("factList","epsilon");
-    grammer_list.add_grammer("ruleList","epsilon");
+    grammer_list.add_grammer("ruleList","rule ruleList");
     grammer_list.add_grammer("ruleList","epsilon");
     grammer_list.add_grammer("queryList","query queryList");
     grammer_list.add_grammer("queryList","epsilon");
@@ -43,20 +46,20 @@ class Parser{
     //debug.output(11,"Grammers:\n"+grammer_list.print());
     debug.flag(4);
   }
-  void read_in(TokenList token_list){
+  void read_in(TokenList *token_list){
     debug.flag(5);
-    this->token_list=token_list;
+    for(int iter=0; iter < token_list->size(); iter++)
+      this->token_list.add(token_list->get(iter));
     debug.flag(6);
   }
-  void check_syntax(){
-    debug.flag(7);
-    vector<Tokens> tokens=token_list;
-    GrammerList grammers=grammer_list;
-    bool fail=false;
-    while(tokens.size() !=0 && !(fail)){
-      
-    }
-    debug.flag(8);
+  void write_out(){
+    debug.flag(11);
+    debug.output(12,"Objects Written to file");
+  }
+  void output_file(string file){
+    debug.flag(13);
+    out_file=file;
+    debug.output(14,"Output file changed to "+file);
   }
   void debug_on(bool turn_on){
     debug.flag(9);
@@ -65,13 +68,81 @@ class Parser{
     token_list.debug_on(turn_on);
     debug.output(10,"Debug turned on.");
   }
- private:
-  void recur_check_syn(int token){
-    for (int iter=0; iter < grammer_list.size(); iter++){
-      //THIS WONT WORK. INFINITE RECURSION IF ALLOWED DEPTH >1
+  void clear(){
+    debug.flag(15);
+    token_list.clear();
+    program=ProgramObject();
+    debug.flag(22);
+  }
+  void build(){
+    debug.flag(7);
+    stack<string> current;
+    program=ProgramObject("Program",2);
+    current.push("EOF");
+    current.push("datalogProgram");
+    bool fail=false;
+    while(current.size() !=0 && !(fail)){
+      fail=true;
+      string next=current.top();
+      //debug.output(17,"Comparing stack value "+next+" with token type "+token_list.top().type+" and value "+token_list.top().value);
+      if(token_list.top().type == next){
+	//debug.output(17,"Stack value "+next+" matched with token "+token_list.top().type+" and value "+token_list.top().value);
+	match(current);
+	fail=false;
+      }
+      else{
+	if (next.at(0) <97 || next.at(0) >123){
+	  debug.output(16,"Syntax() needs to be built");
+	  fail=true;
+	}
+	else{
+	  //debug.output(17,"Querying grammers for "+next+" with terminal "+token_list.top().type+" and value "+token_list.top().value);
+	  push_new(current, next);
+	  fail=false;
+	}
+      }
     }
+    if(token_list.virtual_size() != 0)
+      debug.output(18,"Syntax() needs to be built");
+    //debug.output("program:\n"+program.print());
+    debug.flag(8);
+  }
+ private:
+  void match(stack<string> &current){
+    debug.flag(19);
+    if(!(program.add(Token(token_list.top().type,token_list.top().value,token_list.top().line)))){
+      debug.output("program:\n"+program.print());
+      debug.output("Breaking: "+current.top());
+      debug.abort(true,99);
+    }
+    token_list.pop();
+    current.pop();
+    debug.flag(20);
+  }
+  void push_new(stack<string> &current, string &next){
+    debug.flag(21);
+    vector<string> replace=grammer_list.search(next, token_list.top().type);
+    int list=0;
+    if(replace.size()>1)
+      if(replace[replace.size()-1] == current.top()){
+	program.extend();
+	list=1;
+      }
+    
+    if(!(program.add(ProgramObject(current.top(),replace.size()-list)))){
+      debug.output("program:\n"+program.print());
+      debug.output("Breaking: "+current.top());
+      debug.abort(true,98);
+    }
+    current.pop();
+    for(int iter2=replace.size()-1;iter2>=0;iter2--){
+      current.push(replace[iter2]);
+    }
+    debug.flag(22);
   }
   Debugger debug;
+  string out_file;
   GrammerList grammer_list;
   TokenList token_list;
+  ProgramObject program;
 };

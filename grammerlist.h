@@ -34,10 +34,12 @@ class GrammerList{
     debug.flag(0); debug.flag(iter_max); debug.flag(0);
     debug.output(6,"Terminal list built.");
   }
+  /*
   int size(){
     debug.flag(9);
     return grammer_list.size();
   }
+  */
   vector<string> get_rule(int iter){
     debug.flag(10);
     return grammer_list[iter].get_equiv();
@@ -78,7 +80,52 @@ class GrammerList{
     debug.flag(13);
     return output.str();
   }
+  void clear(){
+    debug.flag(14);
+    for(unsigned iter=0; grammer_list.size() >0; iter++)
+      grammer_list.pop_back();
+    debug.output(15, "Grammers Cleared.");
+  }
+  Grammer get(int spot){
+    debug.flag(20);
+    return grammer_list[spot];
+  }
+  vector<string> search(string keyword, string terminal){
+    debug.flag(21);
+    vector<string> output;
+    output=is_match(keyword,terminal);
+    if (output.size() !=0) return output;
+    output=is_eps(keyword);
+    if (output.size() ==0) return output;
+    debug.pause();
+    vector<string> dummy;
+    dummy.push_back("Syntax");
+    debug.output(22,"Rule not found");
+    debug.pause();
+    return dummy;
+  }
  private:
+  vector<string> is_match(string &keyword, string &terminal){
+    for(unsigned iter=0; iter < grammer_list.size(); iter++)
+      if(grammer_list[iter].get_keyword()==keyword)
+	for(unsigned iter2=0; iter2 < grammer_list[iter].get_terminals().size(); iter2++)
+	  if(grammer_list[iter].get_terminals()[iter2]==terminal)
+	    return grammer_list[iter].get_equiv();
+    vector<string> dummy;
+    return dummy;
+  }
+  vector<string> is_eps(string &keyword){
+    for(unsigned iter=0; iter < grammer_list.size(); iter++)
+      if(grammer_list[iter].get_keyword()==keyword)
+	for(unsigned iter2=0; iter2 < grammer_list[iter].get_terminals().size(); iter2++)
+	  if(grammer_list[iter].get_terminals()[iter2]=="EPSILON"){
+	    vector<string> dummy;
+	    return dummy;
+	  }
+    vector<string> dummy;
+    dummy.push_back("Failed");
+    return dummy;
+}
   void find_terminals(unsigned &iter){
     if(grammer_list[iter].get_equiv()[0].at(0) < 97 || grammer_list[iter].get_equiv()[0].at(0) > 123){ // anything with a lowercase is not a token
       vector<string> output2;

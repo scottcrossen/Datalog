@@ -114,6 +114,10 @@ class Scanner{
     token_list.clear();
     debug.output(22,"Tokens Cleared.");
   }
+  TokenList* get_tokens(){
+    debug.flag(23);
+    return &token_list;
+  }
  private:
   Debugger debug;
   Rules rules;

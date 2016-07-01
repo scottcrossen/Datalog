@@ -114,7 +114,13 @@ int main(){
   scanner.write_out();
   //debug.output(14, "Test 20 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output20.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
+  */
 
   scanner.input_file("./test_cases/in21.txt");
   scanner.output_file("./test_cases/output21.txt");
@@ -122,7 +128,13 @@ int main(){
   scanner.write_out();
   //debug.output(15, "Test 21 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output21.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
+  /*
 
   scanner.input_file("./test_cases/in22.txt");
   scanner.output_file("./test_cases/output22.txt");
@@ -211,7 +223,8 @@ int main(){
   //debug.output(26, "Test input output:");
   //scanner.print();
   scanner.clear_tokens();
-*/
+  */
+
 
   // Finish program:
   debug.flag(27);

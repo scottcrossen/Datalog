@@ -9,6 +9,7 @@ class TokenList{
   TokenList(){
     debug=Debugger("Token A");
     debug.output(1,"Token array object created.");
+    start=0;
   }
   ~TokenList(){
     debug.output(2,"Token array object deconstructed.");
@@ -62,9 +63,35 @@ class TokenList{
       token_list.pop_back();
     debug.output(14, "Tokens Cleared.");
   }
+  int size(){
+    debug.flag(15);
+    return token_list.size();
+  }
+  int virtual_size(){
+    debug.flag(15);
+    return token_list.size()-start;
+  }
+  Token top(){
+    debug.flag(16);
+    return token_list[start];
+  }
+  void pop(){
+    debug.flag(17);
+    start++;
+  }
+  Token get_actual(int spot){
+    debug.flag(19);
+    return token_list[spot];
+  }
+  Token get(int spot){
+    debug.flag(19);
+    return token_list[spot+start];
+  }
+    
  private:
   Debugger debug;
   vector<Token> token_list;
+  int start;
   void check_colondash(unsigned &iter){
     if(token_list[iter].value==":-"){
       for(int iter2=iter-1; iter2 >=0 ; iter2--){
