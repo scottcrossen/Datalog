@@ -1,5 +1,6 @@
 #include "scanner.h"
 #include "parser.h"
+#include "parserclasses.h"
 #include <iostream>
 using namespace std;
 int main(int argc, char* argv[]){

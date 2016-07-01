@@ -3,6 +3,7 @@
 #include "token.h"
 #include "grammerlist.h"
 #include "programobject.h"
+#include "parserclasses.h"
 #include <stack>
 #include <set>
 #pragma once
