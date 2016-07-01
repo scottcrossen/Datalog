@@ -97,11 +97,10 @@ class GrammerList{
     if (output.size() !=0) return output;
     output=is_eps(keyword);
     if (output.size() ==0) return output;
-    debug.pause();
     vector<string> dummy;
     dummy.push_back("Syntax");
     debug.output(22,"Rule not found");
-    debug.pause();
+    //debug.pause();
     return dummy;
   }
  private:

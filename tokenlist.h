@@ -62,6 +62,7 @@ class TokenList{
     for(unsigned iter=0; token_list.size() >0; iter++)
       token_list.pop_back();
     debug.output(14, "Tokens Cleared.");
+    start=0;
   }
   int size(){
     debug.flag(15);

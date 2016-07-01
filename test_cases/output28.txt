@@ -1,37 +1,12 @@
-(SCHEMES,"Schemes",3)
-(COLON,":",3)
-(ID,"bob",4)
-(LEFT_PAREN,"(",4)
-(ID,"A",4)
-(COMMA,",",4)
-(ID,"B",4)
-(RIGHT_PAREN,")",4)
-(FACTS,"Facts",6)
-(COLON,":",6)
-(ID,"bob",7)
-(LEFT_PAREN,"(",7)
-(STRING,"'4'",7)
-(COMMA,",",7)
-(STRING,"'2'",7)
-(RIGHT_PAREN,")",7)
-(PERIOD,".",7)
-(QUERIES,"Queries",12)
-(COLON,":",12)
-(ID,"bob",13)
-(LEFT_PAREN,"(",13)
-(ID,"X",13)
-(COMMA,",",13)
-(ID,"Y",13)
-(RIGHT_PAREN,")",13)
-(Q_MARK,"?",13)
-(FACTS,"Facts",17)
-(COLON,":",17)
-(ID,"bob",18)
-(LEFT_PAREN,"(",18)
-(STRING,"'4'",18)
-(COMMA,",",18)
-(STRING,"'4'",18)
-(RIGHT_PAREN,")",18)
-(PERIOD,".",18)
-(EOF,"",21)
-Total Tokens = 36
+Success!
+Schemes(1):
+  bob(A,B)
+Facts(2):
+  bob('4','2')
+  bob('4','4')
+Rules(0):
+Queries(1):
+  bob(X,Y)
+Domain(2):
+  '2'
+  '4'

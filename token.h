@@ -39,6 +39,9 @@ class Token : public ProgramObject{
     output << "(" << type << "," <<"\""<< value<<"\"" <<"," << line << ")" <<endl;
     return output.str();
   }
+  string to_string(){
+    return value;
+  }
  private:
   Debugger debug;
 };

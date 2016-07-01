@@ -107,6 +107,7 @@ int main(){
   //debug.output(13, "Test 15 output:");
   //scanner.print();
   scanner.clear_tokens();
+*/
 
   scanner.input_file("./test_cases/in20.txt");
   scanner.output_file("./test_cases/output20.txt");
@@ -120,7 +121,6 @@ int main(){
   parser.write_out();
   scanner.clear_tokens();
   parser.clear();
-  */
 
   scanner.input_file("./test_cases/in21.txt");
   scanner.output_file("./test_cases/output21.txt");
@@ -134,7 +134,6 @@ int main(){
   parser.write_out();
   scanner.clear_tokens();
   parser.clear();
-  /*
 
   scanner.input_file("./test_cases/in22.txt");
   scanner.output_file("./test_cases/output22.txt");
@@ -142,7 +141,12 @@ int main(){
   scanner.write_out();
   //debug.output(16, "Test 22 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output22.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in23.txt");
   scanner.output_file("./test_cases/output23.txt");
@@ -150,7 +154,12 @@ int main(){
   scanner.write_out();
   //debug.output(17, "Test 23 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output23.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in24.txt");
   scanner.output_file("./test_cases/output24.txt");
@@ -158,7 +167,12 @@ int main(){
   scanner.write_out();
   //debug.output(18, "Test 24 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output24.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in25.txt");
   scanner.output_file("./test_cases/output25.txt");
@@ -166,7 +180,12 @@ int main(){
   scanner.write_out();
   //debug.output(19, "Test 25 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output25.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in26.txt");
   scanner.output_file("./test_cases/output26.txt");
@@ -174,7 +193,12 @@ int main(){
   scanner.write_out();
   //debug.output(20, "Test 25 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output26.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in27.txt");
   scanner.output_file("./test_cases/output27.txt");
@@ -182,7 +206,12 @@ int main(){
   scanner.write_out();
   //debug.output(21, "Test 26 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output27.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in28.txt");
   scanner.output_file("./test_cases/output28.txt");
@@ -190,7 +219,12 @@ int main(){
   scanner.write_out();
   //debug.output(22, "Test 27 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output28.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in29.txt");
   scanner.output_file("./test_cases/output29.txt");
@@ -198,7 +232,12 @@ int main(){
   scanner.write_out();
   //debug.output(23, "Test 28 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output29.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in61.txt");
   scanner.output_file("./test_cases/output61.txt");
@@ -206,7 +245,12 @@ int main(){
   scanner.write_out();
   //debug.output(24, "Test 61 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output61.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./test_cases/in62.txt");
   scanner.output_file("./test_cases/output62.txt");
@@ -214,7 +258,12 @@ int main(){
   scanner.write_out();
   //debug.output(25, "Test 62 output:");
   //scanner.print();
+  parser.output_file("./test_cases/output62.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
 
   scanner.input_file("./input.txt");
   scanner.output_file("./output.txt");
@@ -222,8 +271,12 @@ int main(){
   scanner.write_out();
   //debug.output(26, "Test input output:");
   //scanner.print();
+  parser.output_file("./output.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
-  */
+  parser.clear();
 
 
   // Finish program:

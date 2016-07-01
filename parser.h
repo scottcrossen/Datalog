@@ -54,6 +54,50 @@ class Parser{
   }
   void write_out(){
     debug.flag(11);
+    stringstream output;
+    set<string> errors;
+    program.find_error("Syntax", errors);
+    if (errors.size() != 0){
+      output << "Failure!"<<endl;
+      for(set<string>::iterator iter=errors.begin(); iter != errors.end(); iter++){
+	output << "  " << (*iter) <<endl;
+	break;
+      }
+      //debug.output(8,"Syntax Error:\n"+program.print());
+    }
+    else{
+      output << "Success!"<< endl;
+      set<string> schemes;
+      program.find_print("scheme", schemes);
+      output << "Schemes("<<schemes.size()<<"):"<<endl;
+      for(set<string>::iterator iter=schemes.begin(); iter != schemes.end(); iter++)
+	output << "  " << (*iter) <<endl;
+      set<string> facts;
+      program.find_print("fact", facts);
+      output << "Facts("<<facts.size()<<"):"<<endl;
+      for(set<string>::iterator iter=facts.begin(); iter != facts.end(); iter++)
+	output << "  " << (*iter).substr(0,(*iter).size()-1)<<endl;
+      set<string> rules;
+      program.find_print("rule", rules);
+      output << "Rules("<<rules.size()<<"):"<<endl;
+      for(set<string>::iterator iter=rules.begin(); iter != rules.end(); iter++)
+	output << "  " << (*iter).substr(0,(*iter).size()-1)<<endl;
+      set<string> queries;
+      program.find_print("query", queries);
+      output << "Queries("<<queries.size()<<"):"<<endl;
+      for(set<string>::iterator iter=queries.begin(); iter != queries.end(); iter++)
+	output << "  " << (*iter).substr(0,(*iter).size()-1)<<endl;
+      set<string> domain;
+      program.find_print("STRING", domain);
+      output << "Domain("<<domain.size()<<"):"<<endl;
+      for(set<string>::iterator iter=domain.begin(); iter !=domain.end(); iter++)
+	output << "  " << *iter<<endl;
+    }
+    ofstream file_out;
+    file_out.open(out_file.c_str());
+    file_out << output.str();
+    file_out.close();
+    //debug.output(23,"Program Output:\n"+output.str());
     debug.output(12,"Objects Written to file");
   }
   void output_file(string file){
@@ -71,12 +115,13 @@ class Parser{
   void clear(){
     debug.flag(15);
     token_list.clear();
-    program=ProgramObject();
+    program.clear();
     debug.flag(22);
   }
   void build(){
     debug.flag(7);
     stack<string> current;
+    program.clear();
     program=ProgramObject("Program",2);
     current.push("EOF");
     current.push("datalogProgram");
@@ -87,56 +132,68 @@ class Parser{
       //debug.output(17,"Comparing stack value "+next+" with token type "+token_list.top().type+" and value "+token_list.top().value);
       if(token_list.top().type == next){
 	//debug.output(17,"Stack value "+next+" matched with token "+token_list.top().type+" and value "+token_list.top().value);
-	match(current);
 	fail=false;
+	match(current, fail);
       }
       else{
 	if (next.at(0) <97 || next.at(0) >123){
-	  debug.output(16,"Syntax() needs to be built");
+	  syntax(token_list.top());
 	  fail=true;
 	}
 	else{
 	  //debug.output(17,"Querying grammers for "+next+" with terminal "+token_list.top().type+" and value "+token_list.top().value);
-	  push_new(current, next);
 	  fail=false;
+	  push_new(current, next, fail);
 	}
       }
     }
     if(token_list.virtual_size() != 0)
-      debug.output(18,"Syntax() needs to be built");
-    //debug.output("program:\n"+program.print());
-    debug.flag(8);
+      syntax(token_list.top());
+    //debug.output(8,"program:\n"+program.print());
+    debug.output(8,"Program syntax built.");
   }
  private:
-  void match(stack<string> &current){
+  void syntax(Token error){
+    program.clear();
+    program.type="Syntax";
+    program.extend();
+    //cout << error.type <<" " <<error.value << " " << error.line <<"+"<< endl;
+    program.add(new Token(error.type,error.value,error.line));
+  }
+  void match(stack<string> &current,bool &fail){
     debug.flag(19);
-    if(!(program.add(Token(token_list.top().type,token_list.top().value,token_list.top().line)))){
-      debug.output("program:\n"+program.print());
-      debug.output("Breaking: "+current.top());
-      debug.abort(true,99);
+    if(!(program.add(new Token(token_list.top().type,token_list.top().value,token_list.top().line)))){
+      syntax(token_list.top());
+      fail=true;
     }
     token_list.pop();
     current.pop();
     debug.flag(20);
   }
-  void push_new(stack<string> &current, string &next){
+  void push_new(stack<string> &current, string &next, bool &fail){
+    fail=false;
     debug.flag(21);
     vector<string> replace=grammer_list.search(next, token_list.top().type);
     int list=0;
-    if(replace.size()>1)
-      if(replace[replace.size()-1] == current.top()){
+    if(replace.size()>1){
+      if(replace[replace.size()-1]=="Syntax") {
+	syntax(token_list.top());
+	fail=true;
+      }
+      if(replace[replace.size()-1] == current.top() && !(fail)){
 	program.extend();
 	list=1;
       }
-    
-    if(!(program.add(ProgramObject(current.top(),replace.size()-list)))){
-      debug.output("program:\n"+program.print());
-      debug.output("Breaking: "+current.top());
-      debug.abort(true,98);
     }
-    current.pop();
-    for(int iter2=replace.size()-1;iter2>=0;iter2--){
-      current.push(replace[iter2]);
+    if (!(fail)){
+      if(!(program.add(new ProgramObject(current.top(),replace.size()-list)))){
+	syntax(token_list.top());
+	fail=true;
+      }
+      current.pop();
+      for(int iter2=replace.size()-1;iter2>=0;iter2--){
+	current.push(replace[iter2]);
+      }
     }
     debug.flag(22);
   }

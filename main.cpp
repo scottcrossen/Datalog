@@ -21,7 +21,12 @@ int main(int argc, char* argv[]){
   scanner.output_file(output_file);
   scanner.read_in();
   scanner.write_out();
+  parser.output_file(output_file);
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
   scanner.clear_tokens();
+  parser.clear();
   cout << "Program finished Successfully." << endl;
   return 0;
 }
