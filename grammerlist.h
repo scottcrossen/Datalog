@@ -31,28 +31,21 @@ class GrammerList{
       }
       iter_max++;
     }
-    debug.flag(0); debug.flag(iter_max); debug.flag(0);
     debug.output(6,"Terminal list built.");
   }
-  /*
-  int size(){
-    debug.flag(9);
-    return grammer_list.size();
-  }
-  */
   vector<string> get_rule(int iter){
-    debug.flag(10);
+    debug.flag(7);
     return grammer_list[iter].get_equiv();
   }
   void debug_on(bool turn_on){
-    debug.flag(11);
+    debug.flag(8);
     debug.turned_on=turn_on;
     /*for(unsigned iter=0; iter <grammer_list.size(); iter++)
       grammer_list[iter].debug_on(turn_on);*/
-    debug.output(12,"Debug turned on.");
+    debug.output(9,"Debug turned on.");
   }
   string print(){
-    debug.flag(12);
+    debug.flag(10);
     stringstream output;
     unsigned iter=0;
     for(iter=0; iter < grammer_list.size(); iter++){
@@ -64,7 +57,7 @@ class GrammerList{
 	output << grammer_list[iter].get_terminals()[iter2] << " ";
       output << endl;
     }
-    debug.flag(13);
+    debug.flag(11);
     return output.str();
   }
   string print(unsigned iter){
@@ -87,11 +80,11 @@ class GrammerList{
     debug.output(15, "Grammers Cleared.");
   }
   Grammer get(int spot){
-    debug.flag(20);
+    debug.flag(16);
     return grammer_list[spot];
   }
   vector<string> search(string keyword, string terminal){
-    debug.flag(21);
+    debug.flag(17);
     vector<string> output;
     output=is_match(keyword,terminal);
     if (output.size() !=0) return output;
@@ -99,21 +92,23 @@ class GrammerList{
     if (output.size() ==0) return output;
     vector<string> dummy;
     dummy.push_back("Syntax");
-    debug.output(22,"Rule not found");
-    //debug.pause();
+    debug.output(18,"Rule not found.");
     return dummy;
   }
  private:
   vector<string> is_match(string &keyword, string &terminal){
+    debug.flag(19);
     for(unsigned iter=0; iter < grammer_list.size(); iter++)
       if(grammer_list[iter].get_keyword()==keyword)
 	for(unsigned iter2=0; iter2 < grammer_list[iter].get_terminals().size(); iter2++)
 	  if(grammer_list[iter].get_terminals()[iter2]==terminal)
 	    return grammer_list[iter].get_equiv();
     vector<string> dummy;
+    debug.flag(20);
     return dummy;
   }
   vector<string> is_eps(string &keyword){
+    debug.flag(21);
     for(unsigned iter=0; iter < grammer_list.size(); iter++)
       if(grammer_list[iter].get_keyword()==keyword)
 	for(unsigned iter2=0; iter2 < grammer_list[iter].get_terminals().size(); iter2++)
@@ -123,9 +118,11 @@ class GrammerList{
 	  }
     vector<string> dummy;
     dummy.push_back("Failed");
+    debug.flag(22);
     return dummy;
 }
   void find_terminals(unsigned &iter){
+    debug.flag(23);
     if(grammer_list[iter].get_equiv()[0].at(0) < 97 || grammer_list[iter].get_equiv()[0].at(0) > 123){ // anything with a lowercase is not a token
       vector<string> output2;
       output2.push_back(grammer_list[iter].get_equiv()[0]);
@@ -133,8 +130,10 @@ class GrammerList{
     }
     else
       look_for_terminals(iter);
+    debug.flag(24);
   }
   void look_for_terminals(unsigned &iter){
+    debug.flag(25);
     bool found_all=true;
     vector<string> output2;
     for (unsigned iter2 =0; iter2 < grammer_list.size(); iter2++)
@@ -147,6 +146,7 @@ class GrammerList{
       }
     if (found_all)
       grammer_list[iter].set_terminals(output2);
+    debug.flag(26);
   }
   Debugger debug;
   vector<Grammer> grammer_list;

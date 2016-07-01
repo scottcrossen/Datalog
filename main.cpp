@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include "parser.h"
 #include <iostream>
 using namespace std;
 int main(int argc, char* argv[]){
@@ -16,7 +17,9 @@ int main(int argc, char* argv[]){
   cout << "Reading in from file:  " << input_file << endl;
   cout << "Writing out from file: " << output_file << endl;
   Scanner scanner=Scanner();
+  Parser parser=Parser();
   scanner.initialize();
+  parser.initialize();
   scanner.input_file(input_file);
   scanner.output_file(output_file);
   scanner.read_in();

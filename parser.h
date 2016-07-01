@@ -10,14 +10,15 @@ class Parser{
  public:
   Parser(){
     debug=Debugger("Parser");
-    debug.output(1,"Parser object created.");
+    debug.flag(1);
     grammer_list=GrammerList();
+    debug.output(2,"Parser object created.");
   }
   ~Parser(){
-    debug.flag(2);
+    debug.flag(3);
   }
   void initialize(){
-    debug.flag(3);
+    debug.flag(4);
     grammer_list.add_grammer("datalogProgram","datalogSchemes datalogFacts datalogRules datalogQueries");
     grammer_list.add_grammer("datalogSchemes","SCHEMES COLON scheme schemeList");
     grammer_list.add_grammer("datalogFacts","FACTS COLON factList");
@@ -43,30 +44,32 @@ class Parser{
     grammer_list.add_grammer("parameter","STRING");
     grammer_list.add_grammer("parameter","ID");
     grammer_list.add_grammer("epsilon","EPSILON");
+    debug.flag(6);
     grammer_list.build_terminal_list();
     //debug.output(11,"Grammers:\n"+grammer_list.print());
-    debug.flag(4);
+    debug.output(7,"Initialized. Grammer list created.");
   }
   void read_in(TokenList *token_list){
-    debug.flag(5);
+    debug.flag(8);
     for(int iter=0; iter < token_list->size(); iter++)
       this->token_list.add(token_list->get(iter));
-    debug.flag(6);
+    debug.output(9,"Token list read in.");
   }
   void write_out(){
-    debug.flag(11);
+    debug.flag(10);
     stringstream output;
     set<string> errors;
     program.find_error("Syntax", errors);
     if (errors.size() != 0){
+      debug.flag(11);
       output << "Failure!"<<endl;
       for(set<string>::iterator iter=errors.begin(); iter != errors.end(); iter++){
 	output << "  " << (*iter) <<endl;
 	break;
       }
-      //debug.output(8,"Syntax Error:\n"+program.print());
     }
     else{
+      debug.flag(12);
       output << "Success!"<< endl;
       vector<string> schemes;
       program.find_print("scheme", schemes);
@@ -96,33 +99,35 @@ class Parser{
       for(set<string>::iterator iter=domain.begin(); iter !=domain.end(); iter++)
 	output << "  " << *iter<<endl;
     }
+    debug.flag(13);
     ofstream file_out;
     file_out.open(out_file.c_str());
     file_out << output.str();
     file_out.close();
-    //debug.output(23,"Program Output:\n"+output.str());
-    debug.output(12,"Objects Written to file");
+    debug.output(14,"Objects Written to file");
+    //debug.output(14,"Program Output:\n"+output.str());
   }
   void output_file(string file){
-    debug.flag(13);
+    debug.flag(15);
     out_file=file;
-    debug.output(14,"Output file changed to "+file);
+    debug.output(16,"Output file changed to "+file);
   }
   void debug_on(bool turn_on){
-    debug.flag(9);
+    debug.flag(17);
     debug.turned_on=turn_on;
     grammer_list.debug_on(turn_on);
     token_list.debug_on(turn_on);
-    debug.output(10,"Debug turned on.");
+    program.debug_on(turn_on);
+    debug.output(18,"Debug turned on.");
   }
   void clear(){
-    debug.flag(15);
+    debug.flag(19);
     token_list.clear();
     program.clear();
-    debug.flag(22);
+    debug.output(20,"Parser cleared.");
   }
   void build(){
-    debug.flag(7);
+    debug.flag(21);
     stack<string> current;
     program.clear();
     program=ProgramObject("Program",2);
@@ -132,9 +137,8 @@ class Parser{
     while(current.size() !=0 && !(fail)){
       fail=true;
       string next=current.top();
-      //debug.output(17,"Comparing stack value "+next+" with token type "+token_list.top().type+" and value "+token_list.top().value);
       if(token_list.top().type == next){
-	//debug.output(17,"Stack value "+next+" matched with token "+token_list.top().type+" and value "+token_list.top().value);
+	//debug.output(22,"Stack value "+next+" matched with token "+token_list.top().type+" and value "+token_list.top().value);
 	fail=false;
 	match(current, fail);
       }
@@ -144,7 +148,7 @@ class Parser{
 	  fail=true;
 	}
 	else{
-	  //debug.output(17,"Querying grammers for "+next+" with terminal "+token_list.top().type+" and value "+token_list.top().value);
+	  //debug.output(23,"Querying grammers for "+next+" with terminal "+token_list.top().type+" and value "+token_list.top().value);
 	  fail=false;
 	  push_new(current, next, fail);
 	}
@@ -152,8 +156,8 @@ class Parser{
     }
     if(token_list.virtual_size() != 0)
       syntax(token_list.top());
-    //debug.output(8,"program:\n"+program.print());
-    debug.output(8,"Program syntax built.");
+    //debug.output(24,"program:\n"+program.print());
+    debug.output(24,"Program syntax built.");
   }
  private:
   void handle_semicolon_dash(vector<string>::iterator &iter){
@@ -162,25 +166,26 @@ class Parser{
       *(iter)=(*(iter)).substr(0,exception)+" :- "+(*(iter)).substr(exception+2,((*iter)).size()-(exception+2));
   }
   void syntax(Token error){
+    debug.flag(25);
     program.clear();
     program.type="Syntax";
     program.extend();
-    //cout << error.type <<" " <<error.value << " " << error.line <<"+"<< endl;
     program.add(new Token(error.type,error.value,error.line));
+    debug.output(26,"Syntax error encountered: "+Token(error.type,error.value,error.line).display());
   }
   void match(stack<string> &current,bool &fail){
-    debug.flag(19);
+    debug.flag(27);
     if(!(program.add(new Token(token_list.top().type,token_list.top().value,token_list.top().line)))){
       syntax(token_list.top());
       fail=true;
     }
     token_list.pop();
     current.pop();
-    debug.flag(20);
+    debug.flag(28);
   }
   void push_new(stack<string> &current, string &next, bool &fail){
+    debug.flag(29);
     fail=false;
-    debug.flag(21);
     vector<string> replace=grammer_list.search(next, token_list.top().type);
     int list=0;
     if(replace.size()>1){
@@ -203,7 +208,7 @@ class Parser{
 	current.push(replace[iter2]);
       }
     }
-    debug.flag(22);
+    debug.flag(30);
   }
   Debugger debug;
   string out_file;

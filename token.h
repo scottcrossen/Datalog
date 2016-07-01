@@ -34,12 +34,15 @@ class Token : public ProgramObject{
     return output.str();
   }
   string obj_print(int tabs){
+    debug.flag(8);
     stringstream output;
     for(int iter=0; iter<tabs; iter++ ) output<<" ";
     output << "(" << type << "," <<"\""<< value<<"\"" <<"," << line << ")" <<endl;
+    debug.flag(9);
     return output.str();
   }
   string to_string(){
+    debug.flag(10);
     return value;
   }
  private:
