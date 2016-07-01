@@ -1,11 +1,12 @@
+#include "programobject.h"
 #include "debugger.h"
 #include <string>
 #include <sstream>
 #pragma once
 
-class Token{
+class Token : public ProgramObject{
  public:
-  string type;
+  //string type;
   string value;
   int line;
   Token(string type, string value, int line){
@@ -31,6 +32,18 @@ class Token{
     debug.output("Token display method accessed.");
     debug.flag(7);
     return output.str();
+  }
+  string obj_print(int tabs){
+    debug.flag(8);
+    stringstream output;
+    for(int iter=0; iter<tabs; iter++ ) output<<" ";
+    output << "(" << type << "," <<"\""<< value<<"\"" <<"," << line << ")" <<endl;
+    debug.flag(9);
+    return output.str();
+  }
+  string to_string(){
+    debug.flag(10);
+    return value;
   }
  private:
   Debugger debug;

@@ -1,6 +1,8 @@
 #include "debugger.h"
 #include <string>
-#include <list>
+#define FAILED 0
+#define INCOMPLETE 1
+#define COMPLETE 2
 #pragma once
 using namespace std;
 class RegExp{
@@ -35,17 +37,23 @@ class RegExp{
   }
   // Returns 0 (fail), 1 (still going), 2 (may have reached finish)
   int check(string current_word){
+    //debug_on(true);
     debug.flag(8);
     unsigned string_spot=0;
-    for (list<string>::iterator it=sequence.begin(); it !=sequence.end(); ++it){
+    for (unsigned iter=0; iter <sequence.size(); ++iter){
+      //for (list<string>::iterator it=sequence.begin(); it !=sequence.end(); ++it){
       debug.flag(9);
-      //debug.output(10,"comparing "+*it+" with "+current_word.substr(string_spot,1)+".");
+      debug.output(10,"comparing "+current_word.substr(string_spot,1)+" with "+sequence[iter]+" from "+expression);
       bool fail=false;
-      if(*it=="*") *it--;
-      if(*it == " " && string_spot >= current_word.size()) return 2;
-      compare_current(it,string_spot, current_word, fail);
+      if(sequence[iter]=="*"){ iter--; debug.output(10,"comparing "+current_word.substr(string_spot,1)+" with "+sequence[iter]+" from "+expression);}
+      //if(*it=="*") *it--;
+      if(sequence[iter]== " " && string_spot >= current_word.size()) return COMPLETE;
+      //if(*it == " " && string_spot >= current_word.size()) return COMPLETE;
+      compare_current_char(iter,string_spot, current_word, fail);
+      //compare_current_char(it,string_spot, current_word, fail);
       debug.flag(12);
-      int ret_int=check_failed(fail,it,string_spot,current_word);
+      int ret_int=check_failed(fail,iter,string_spot,current_word);
+      //int ret_int=check_failed(fail,it,string_spot,current_word);
       if (ret_int !=-1) return ret_int; // remove this line when pasting above function in.
       string_spot++;
     }
@@ -54,46 +62,49 @@ class RegExp{
   }
  private:
   Debugger debug;
-  list<string> sequence;
+  vector<string> sequence;
   string expression;
-  void compare_current(list<string>::iterator &it, unsigned &string_spot, string &current_word, bool &fail){
-    if(*it =="[ ]") is_space(string_spot, current_word, fail);
-    else if(*it == "[A-Z]") is_az(string_spot, current_word, fail);
-    else if(*it == "[A-Za-z]" || *it == "[a-zA-Z]" ) is_azaz(string_spot, current_word, fail);
-    else if(*it == "[A-Za-z0-9]" || *it == "[a-zA-Z0-9]")
-      is_azaz09(string_spot, current_word, fail);
-    else if(*it != current_word.substr(string_spot,1)) fail=true; 
+  void compare_current_char(unsigned &iter, unsigned &string_spot, string &current_word, bool &fail){
+    //void compare_current_char(list<string>::iterator &it, unsigned &string_spot, string &current_word, bool &fail){
+    if(sequence[iter] =="[ ]") is_char_space(string_spot, current_word, fail);
+    else if(sequence[iter] == "[A-Z]") is_char_AZ(string_spot, current_word, fail);
+    else if(sequence[iter] == "[A-Za-z]" || sequence[iter] == "[a-zA-Z]" ) is_char_AZaz(string_spot, current_word, fail);
+    else if(sequence[iter] == "[A-Za-z0-9]" || sequence[iter] == "[a-zA-Z0-9]")
+      is_char_AZaz09(string_spot, current_word, fail);
+    else if(sequence[iter] != current_word.substr(string_spot,1)) fail=true; 
 }
-  void is_space(unsigned &string_spot, string &current_word, bool &fail){
+  void is_char_space(unsigned &string_spot, string &current_word, bool &fail){
     if(string_spot < current_word.size()){
       if(current_word.at(string_spot) != ' ' || current_word.at(string_spot) != '\t' || current_word.at(string_spot) != '\n') fail=true;
     } else fail=true;
   }
-  void is_az(unsigned &string_spot, string &current_word, bool &fail){
+  void is_char_AZ(unsigned &string_spot, string &current_word, bool &fail){
     if(string_spot < current_word.size()){
       if(current_word.at(string_spot) < 65 || (current_word.at(string_spot) >90)) fail=true;
     } else fail=true;
   }
-  void is_azaz(unsigned &string_spot, string &current_word, bool &fail){
+  void is_char_AZaz(unsigned &string_spot, string &current_word, bool &fail){
     if(string_spot < current_word.size()){
       if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122)) fail=true;
     } else fail=true;
   }
-  void is_azaz09(unsigned &string_spot, string &current_word, bool &fail){
+  void is_char_AZaz09(unsigned &string_spot, string &current_word, bool &fail){
     if(string_spot < current_word.size()){
       if((current_word.at(string_spot) < 65 || current_word.at(string_spot) >90) && (current_word.at(string_spot) < 97 || current_word.at(string_spot) >122) && (current_word.at(string_spot) < 48 || current_word.at(string_spot) >57)) fail=true;
     } else fail=true;
 }
-  int check_failed(bool &fail, list<string>::iterator &it, unsigned &string_spot, string &current_word){
+  int check_failed(bool &fail, unsigned &iter, unsigned &string_spot, string &current_word){
+    //int check_failed(bool &fail, list<string>::iterator &it, unsigned &string_spot, string &current_word){
     if(fail==true){
-      if(*(++it)=="*"){
+      if(iter+1==sequence.size()) return FAILED;
+      if(sequence[++iter]=="*"){
 	if(string_spot >= current_word.size())
-	  return 2;
+	  return COMPLETE;
 	string_spot--;
       }
       else if(string_spot >= current_word.size())
-	return 1;
-      else return 0;
+	return INCOMPLETE;
+      else return FAILED;
     }
     return -1; //remove this when pasting back in.
   }

@@ -9,6 +9,7 @@ class TokenList{
   TokenList(){
     debug=Debugger("Token A");
     debug.output(1,"Token array object created.");
+    start=0;
   }
   ~TokenList(){
     debug.output(2,"Token array object deconstructed.");
@@ -24,12 +25,15 @@ class TokenList{
   void add(Token my_token){
     debug.flag(5);
     token_list.push_back(my_token);
-    debug.flag(6);
+    //debug.output(6,"Token Added: "+my_token.value);
+    //debug.flag(6);
   }
   void add(vector<Token> my_tokens){
     debug.flag(7);
-    for(unsigned iter=0; iter< my_tokens.size(); iter++)
+    for(unsigned iter=0; iter< my_tokens.size(); iter++){
       token_list.push_back(my_tokens[iter]);
+      //debug.output(6,"Token Added: "+my_tokens[iter].value);
+    }
     debug.flag(8);
   }
   string print_out(){
@@ -48,7 +52,8 @@ class TokenList{
     for(unsigned iter=0; iter< token_list.size(); iter++){
       debug.flag(11);
       check_colondash(iter);
-      check_id(iter);
+      check_id1(iter);
+      check_id2(iter);
     }
     debug.flag(12);
   }
@@ -57,25 +62,65 @@ class TokenList{
     for(unsigned iter=0; token_list.size() >0; iter++)
       token_list.pop_back();
     debug.output(14, "Tokens Cleared.");
+    start=0;
   }
+  int size(){
+    debug.flag(15);
+    return token_list.size();
+  }
+  int virtual_size(){
+    debug.flag(15);
+    return token_list.size()-start;
+  }
+  Token top(){
+    debug.flag(16);
+    return token_list[start];
+  }
+  void pop(){
+    debug.flag(17);
+    start++;
+  }
+  Token get_actual(int spot){
+    debug.flag(19);
+    return token_list[spot];
+  }
+  Token get(int spot){
+    debug.flag(19);
+    return token_list[spot+start];
+  }
+    
  private:
   Debugger debug;
   vector<Token> token_list;
-  void check_colondash(unsigned iter){
+  int start;
+  void check_colondash(unsigned &iter){
     if(token_list[iter].value==":-"){
-      for(unsigned iter2=iter; iter2 >=0 ; iter2--){
+      for(int iter2=iter-1; iter2 >=0 ; iter2--){
 	if(token_list[iter2].value==":"){
 	  token_list.erase(token_list.begin()+iter2);
+	  iter--;
 	  break;
 	}
       }
     }
   }
-  void check_id(unsigned iter){
+  void check_id1(unsigned &iter){
     if(token_list[iter].type=="ID"){
       for(unsigned iter2=0; iter2 <token_list.size(); iter2++){
 	if(token_list[iter2].value == token_list[iter].value && token_list[iter2].type != "ID"){
 	  token_list.erase(token_list.begin()+iter);
+	  if (iter2 <iter) iter--;
+	  break;
+	}
+      }
+    }
+  }
+  void check_id2(unsigned &iter){
+    if(token_list[iter].type=="ID" && iter>=1){
+      for(int iter2=iter-1; iter2 >=0; --iter2){
+	if(token_list[iter2].line == token_list[iter].line && token_list[iter].value.size() > token_list[iter2].value.size() && token_list[iter2].type != "ID" && token_list[iter].value.find(token_list[iter2].value) == 0){
+	  token_list.erase(token_list.begin()+iter2);
+	  iter--;
 	  break;
 	}
       }
