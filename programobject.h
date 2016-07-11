@@ -1,6 +1,7 @@
 #include <vector>
 #include <set>
 #include "debugger.h"
+#include "parserclasses.h"
 #pragma once
 class ProgramObject{
  public:
@@ -38,8 +39,19 @@ class ProgramObject{
       if(children.size() >=1){
 	if (!(children[children.size()-1]->full()))
 	  children[children.size()-1]->add(new_obj);
-      else
-	children.push_back(new_obj);
+	else{/*
+	  bool list=false;
+	  for(unsigned iter=0; iter < children.size(); iter++){
+	    if(children[iter]->type.size()>=4){
+	      if(children[iter]->type.substr(children[iter]->type.size()-4,4)=="List" && children[iter]->type==new_obj->type){
+		list=true;
+		children[iter]->extend();
+		break;
+	      }
+	    }
+	  }
+	  if(!(list))*/ children.push_back(new_obj);
+	}
       }
       else children.push_back(new_obj);
       if(children.size() == child_size && children[children.size()-1]->full())
@@ -129,10 +141,45 @@ class ProgramObject{
     debug.flag(24);
     return is_full;
   }
+  DatalogProgram build_objects(){
+    DatalogProgram this_object;
+    for(unsigned iter=0; iter<children.size(); iter++){
+      if(children[iter]->type=="datalogScheme"){
+	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
+	  if(children[iter]->children[iter2]->type=="schemeList")
+	  this_object.add_scheme(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
+      }
+      if(children[iter]->type=="datalogFacts"){
+	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
+	  if(children[iter]->children[iter2]->type=="factList")
+	  this_object.add_fact(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
+      }
+      if(children[iter]->type=="datalogRules"){
+	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
+	  if(children[iter]->children[iter2]->type=="ruleList")
+	  this_object.add_rule(children[iter]->children[iter2]->children[0]->children[0]->build_rule());
+      }
+      if(children[iter]->type=="datalogQuery"){
+	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
+	  if(children[iter]->children[iter2]->type=="queryList")
+	  this_object.add_query(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
+      }
+    }
+      return DatalogProgram();
+  }
+  Rule build_rule(){
+    return Rule();
+  }
+  Predicate build_predicate(){
+    return Predicate();
+  }
+  Parameter build_parameter(){
+    return Parameter();
+  }
   string type;
+  vector<ProgramObject*> children;
  private:
   bool is_full;
-  vector<ProgramObject*> children;
   unsigned child_size;
   Debugger debug;
 };

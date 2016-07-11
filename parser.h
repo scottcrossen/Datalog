@@ -21,7 +21,7 @@ class Parser{
   void initialize(){
     debug.flag(4);
     grammer_list.add_grammer("datalogProgram","datalogSchemes datalogFacts datalogRules datalogQueries");
-    grammer_list.add_grammer("datalogSchemes","SCHEMES COLON scheme schemeList");
+    grammer_list.add_grammer("datalogSchemes","SCHEMES COLON schemeList");
     grammer_list.add_grammer("datalogFacts","FACTS COLON factList");
     grammer_list.add_grammer("datalogRules","RULES COLON ruleList");
     grammer_list.add_grammer("datalogQueries","QUERIES COLON query queryList");
@@ -157,10 +157,10 @@ class Parser{
     }
     if(token_list.virtual_size() != 0)
       syntax(token_list.top());
-    //debug.output(24,"program:\n"+program.print());
+    //debug.output(24,"program:\n"+program.print()); debug.pause();
     debug.output(24,"Program syntax built.");
   }
-  DatalogProgram build_objects{
+  DatalogProgram build_objects(){
     debug.flag(31);
     DatalogProgram output;
     set<string> errors;
@@ -170,7 +170,7 @@ class Parser{
     }
     debug.output(32,"Objects Created");
     return output;
-  }
+    }
  private:
   void handle_semicolon_dash(vector<string>::iterator &iter){
     unsigned exception=(*iter).substr(0,(*iter).size()-1).find(":-");
@@ -179,6 +179,7 @@ class Parser{
   }
   void syntax(Token error){
     debug.flag(25);
+    //debug.output(25,"program:\n"+program.print()); debug.pause();
     program.clear();
     program.type="Syntax";
     program.extend();

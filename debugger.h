@@ -5,7 +5,7 @@
 #pragma once
 using namespace std;
 const bool debug_on=false;
-const bool editor=false;
+const bool editor=true;
 class Debugger{
  private:
   vector<int> flags;

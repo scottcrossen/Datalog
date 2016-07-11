@@ -1,6 +1,13 @@
 #pragma once
 
-class Parameter {
+class AbstractObject {
+ public:
+  AbstractObject(){}
+  ~AbstractObject(){}
+  virtual string toString()=0;
+};
+
+class Parameter : public AbstractObject{
  public:
   Parameter(){}
   Parameter(string ID){
@@ -14,7 +21,7 @@ class Parameter {
   string ID;
 };
 
-class Predicate {
+class Predicate : public AbstractObject{
  public:
   Predicate(){}
   Predicate(Parameter ID, vector<Parameter> parameter_list){
@@ -41,7 +48,7 @@ class Predicate {
   vector<Parameter> parameter_list;
 };
 
-class Rule {
+class Rule : public AbstractObject{
  public:
   Rule(){};
   Rule(Predicate rule, vector<Predicate> predicates){
@@ -68,7 +75,7 @@ class Rule {
   vector<Predicate> predicates;
 };
 
-class DatalogProgram {
+class DatalogProgram : public AbstractObject {
  public:
   DatalogProgram(){}
   ~DatalogProgram(){}
