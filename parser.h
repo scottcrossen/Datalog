@@ -160,6 +160,17 @@ class Parser{
     //debug.output(24,"program:\n"+program.print());
     debug.output(24,"Program syntax built.");
   }
+  DatalogProgram build_objects{
+    debug.flag(31);
+    DatalogProgram output;
+    set<string> errors;
+    program.find_error("Syntax", errors);
+    if (errors.size() == 0){
+      output=program.build_objects();
+    }
+    debug.output(32,"Objects Created");
+    return output;
+  }
  private:
   void handle_semicolon_dash(vector<string>::iterator &iter){
     unsigned exception=(*iter).substr(0,(*iter).size()-1).find(":-");
