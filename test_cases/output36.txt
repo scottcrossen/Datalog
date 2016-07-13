@@ -1,0 +1,10 @@
+Success!
+Schemes(1):
+  bob(A)
+Facts(1):
+  bob('a')
+Rules(0):
+Queries(1):
+  bob(X)
+Domain(1):
+  'a'

@@ -1,0 +1,19 @@
+Success!
+Schemes(1):
+  SK(A,B)
+Facts(4):
+  SK('a','c')
+  SK('b','c')
+  SK('b','b')
+  SK('b','c')
+Rules(0):
+Queries(5):
+  SK(A,'c')
+  SK('b','c')
+  SK(X,X)
+  SK(A,B)
+  SK('c','c')
+Domain(3):
+  'a'
+  'b'
+  'c'
