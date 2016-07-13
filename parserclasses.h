@@ -17,6 +17,9 @@ class Parameter : public AbstractObject{
   string toString(){
     return ID;
   }
+  string return_ID(){
+    return toString();
+  }
  private:
   string ID;
 };
@@ -42,6 +45,12 @@ class Predicate : public AbstractObject{
       output << parameter_list[iter].toString() << ",";
     output << parameter_list[parameter_list.size()-1].toString() << ")";
     return output.str();
+  }
+  string return_ID(){
+    return ID.return_ID();
+  }
+  vector<Parameter> return_parameter_list(){
+    return parameter_list;
   }
  private:
   Parameter ID;
@@ -78,6 +87,13 @@ class Rule : public AbstractObject{
 class DatalogProgram : public AbstractObject {
  public:
   DatalogProgram(){}
+  DatalogProgram(vector<Predicate> schemes, vector<Predicate> facts, vector<Rule> rules, vector<Predicate> queries, set<string> domain){
+  this->schemes=schemes;
+  this->facts=facts;
+  this->rules=rules;
+  this->queries=queries;
+  this->domain=domain;
+  }
   ~DatalogProgram(){}
   string toString(){
     stringstream output;
@@ -115,6 +131,21 @@ class DatalogProgram : public AbstractObject {
   }
   void set_domain(set<string> domain){
     this->domain=domain;
+  }
+  vector<Predicate> return_schemes(){
+    return schemes;
+  }
+  vector<Predicate> return_facts(){
+    return facts;
+  }
+  vector<Rule> return_rules(){
+    return rules;
+  }
+  vector<Predicate> return_queries(){
+    return queries;
+  }
+  set<string> return_domain(){
+    return domain;
   }
  private:
   vector<Predicate> schemes;
