@@ -24,7 +24,7 @@ class Parser{
     grammer_list.add_grammer("datalogSchemes","SCHEMES COLON schemeList");
     grammer_list.add_grammer("datalogFacts","FACTS COLON factList");
     grammer_list.add_grammer("datalogRules","RULES COLON ruleList");
-    grammer_list.add_grammer("datalogQueries","QUERIES COLON query queryList");
+    grammer_list.add_grammer("datalogQueries","QUERIES COLON queryList");
     grammer_list.add_grammer("schemeList","scheme schemeList");
     grammer_list.add_grammer("schemeList","epsilon");
     grammer_list.add_grammer("factList","fact factList");
@@ -166,8 +166,10 @@ class Parser{
     set<string> errors;
     program.find_error("Syntax", errors);
     if (errors.size() == 0){
-      output=program.build_objects();
+      debug.output(32,"No Errors detected. Continuing to build.");
+      output=program.children[0]->build_objects();
     }
+    else debug.output(32,"Error Occured");
     debug.output(32,"Objects Created");
     return output;
     }

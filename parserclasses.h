@@ -84,15 +84,18 @@ class DatalogProgram : public AbstractObject {
     output << "Schemes(" << schemes.size() <<"):"<<endl;
     for(unsigned iter=0; iter < schemes.size(); iter++)
       output <<"  "<< schemes[iter].toString()<<endl;
-    output << "Facts(" << schemes.size() <<"):"<<endl;
-    for(unsigned iter=0; iter < schemes.size(); iter++)
-      output <<"  "<< schemes[iter].toString()<<endl;
-    output << "Rules(" << schemes.size() <<"):"<<endl;
-    for(unsigned iter=0; iter < schemes.size(); iter++)
-      output <<"  "<< schemes[iter].toString()<<endl;
-    output << "Queries(" << schemes.size() <<"):"<<endl;
-    for(unsigned iter=0; iter < schemes.size(); iter++)
-      output <<"  "<< schemes[iter].toString()<<endl;
+    output << "Facts(" << facts.size() <<"):"<<endl;
+    for(unsigned iter=0; iter < facts.size(); iter++)
+      output <<"  "<< facts[iter].toString()<<endl;
+    output << "Rules(" << rules.size() <<"):"<<endl;
+    for(unsigned iter=0; iter < rules.size(); iter++)
+      output <<"  "<< rules[iter].toString()<<endl;
+    output << "Queries(" << queries.size() <<"):"<<endl;
+    for(unsigned iter=0; iter < queries.size(); iter++)
+      output <<"  "<< queries[iter].toString()<<endl;
+    output << "Domain(" << domain.size() <<"):" << endl;
+    for(set<string>::iterator iter=domain.begin(); iter !=domain.end(); iter++)
+      output << "  " << *iter<<endl;
     return output.str();
   }
   void add_scheme(Predicate scheme){
@@ -107,9 +110,16 @@ class DatalogProgram : public AbstractObject {
   void add_query(Predicate query){
     queries.push_back(query);
   }
+  void add_domain(string add){
+    domain.insert(add);
+  }
+  void set_domain(set<string> domain){
+    this->domain=domain;
+  }
  private:
   vector<Predicate> schemes;
   vector<Predicate> facts;
   vector<Rule> rules;
   vector<Predicate> queries;
+  set<string> domain;
 };

@@ -142,43 +142,91 @@ class ProgramObject{
     return is_full;
   }
   DatalogProgram build_objects(){
+    debug_on(false);
     DatalogProgram this_object;
-    for(unsigned iter=0; iter<children.size(); iter++){
-      if(children[iter]->type=="datalogScheme"){
-	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
-	  if(children[iter]->children[iter2]->type=="schemeList")
-	  this_object.add_scheme(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
-      }
-      if(children[iter]->type=="datalogFacts"){
-	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
-	  if(children[iter]->children[iter2]->type=="factList")
-	  this_object.add_fact(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
-      }
-      if(children[iter]->type=="datalogRules"){
-	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
-	  if(children[iter]->children[iter2]->type=="ruleList")
-	  this_object.add_rule(children[iter]->children[iter2]->children[0]->children[0]->build_rule());
-      }
-      if(children[iter]->type=="datalogQuery"){
-	for(unsigned iter2=0; iter2<children[iter]->children.size(); iter2++)
-	  if(children[iter]->children[iter2]->type=="queryList")
-	  this_object.add_query(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
-      }
+    if(type != "datalogProgram"){
+      debug.output("Incorrect object type");
+      debug.abort();
+      return this_object;
     }
-      return DatalogProgram();
+    debug.flag(25);
+    debug.flags_display();
+    debug.output("Building program with value:\n"+obj_print(0));
+    for(unsigned iter=0; iter<children.size(); iter++){
+      debug.output("Found "+children[iter]->type);
+      add_schemes(iter,this_object);
+      add_facts(iter,this_object);
+      add_rules(iter,this_object);
+      add_queries(iter,this_object);
+    }
+    set<string> domain;
+    find_print("STRING", domain);
+    this_object.set_domain(domain);
+    debug.flag(26);
+    return this_object;
   }
   Rule build_rule(){
-    return Rule();
+    debug.flag(27);
+    debug.flags_display();
+    debug.output("Building rule with value:\n"+obj_print(0));
+    Predicate current_rule=children[0]->build_predicate();
+    vector<Predicate> predicates;
+    predicates.push_back(children[2]->build_predicate());
+    for( unsigned iter=3; iter< children.size()-2; iter++)
+      predicates.push_back(children[iter]->children[1]->build_predicate());
+    debug.flag(28);
+    return Rule(current_rule,predicates);
   }
   Predicate build_predicate(){
-    return Predicate();
+    debug.flag(29);
+    debug.flags_display();
+    debug.output("Building predicate with value:\n"+obj_print(0));
+    Parameter ID=Parameter(children[0]->to_string());
+    vector<Parameter> parameter_list;
+    parameter_list.push_back(children[2]->build_parameter());
+    for( unsigned iter=3; iter< children.size()-2; iter++)
+      parameter_list.push_back(children[iter]->children[1]->build_parameter());
+    debug.flag(30);
+    return Predicate(ID,parameter_list);
   }
   Parameter build_parameter(){
-    return Parameter();
+    debug.flag(31);
+    debug.flags_display();
+    debug.output("Building Parameter with value:\n"+obj_print(0));
+    debug.flag(32);
+    return Parameter(children[0]->to_string());
   }
   string type;
   vector<ProgramObject*> children;
  private:
+  void add_schemes(unsigned &iter, DatalogProgram &this_object){
+    if(children[iter]->type=="datalogSchemes"){
+      for(unsigned iter2=0; iter2<children[iter]->children.size()-1; iter2++)
+	if(children[iter]->children[iter2]->type=="schemeList")
+	  this_object.add_scheme(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
+    }
+  }
+  void add_facts(unsigned &iter, DatalogProgram &this_object){
+    if(children[iter]->type=="datalogFacts"){
+      for(unsigned iter2=0; iter2<children[iter]->children.size()-1; iter2++)
+	if(children[iter]->children[iter2]->type=="factList")
+	  this_object.add_fact(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
+    }
+  }
+  void add_rules(unsigned &iter, DatalogProgram &this_object){
+    if(children[iter]->type=="datalogRules"){
+      for(unsigned iter2=0; iter2<children[iter]->children.size()-1; iter2++)
+	if(children[iter]->children[iter2]->type=="ruleList")
+	  this_object.add_rule(children[iter]->children[iter2]->children[0]->build_rule());
+    }
+  }
+  void add_queries(unsigned &iter, DatalogProgram &this_object){
+    if(children[iter]->type=="datalogQueries"){
+      for(unsigned iter2=0; iter2<children[iter]->children.size()-1; iter2++)
+	if(children[iter]->children[iter2]->type=="queryList")
+	  this_object.add_query(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
+    }
+  }
   bool is_full;
   unsigned child_size;
   Debugger debug;
