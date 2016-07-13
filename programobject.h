@@ -201,6 +201,7 @@ class ProgramObject{
  private:
   void add_schemes(unsigned &iter, DatalogProgram &this_object){
     if(children[iter]->type=="datalogSchemes"){
+      this_object.add_scheme(children[iter]->children[2]->children[0]->build_predicate());
       for(unsigned iter2=0; iter2<children[iter]->children.size()-1; iter2++)
 	if(children[iter]->children[iter2]->type=="schemeList")
 	  this_object.add_scheme(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
@@ -222,6 +223,7 @@ class ProgramObject{
   }
   void add_queries(unsigned &iter, DatalogProgram &this_object){
     if(children[iter]->type=="datalogQueries"){
+      this_object.add_query(children[iter]->children[2]->children[0]->build_predicate());
       for(unsigned iter2=0; iter2<children[iter]->children.size()-1; iter2++)
 	if(children[iter]->children[iter2]->type=="queryList")
 	  this_object.add_query(children[iter]->children[iter2]->children[0]->children[0]->build_predicate());
