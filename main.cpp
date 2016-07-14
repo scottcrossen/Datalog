@@ -33,6 +33,7 @@ int main(int argc, char* argv[]){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.build_database();
   database.output_file(output_file);
   database.apply_queries();
   database.write_out();

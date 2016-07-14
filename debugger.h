@@ -5,14 +5,14 @@
 #pragma once
 using namespace std;
 const bool debug_on=false;
-const bool editor=false;
+const bool editor=true;
 class Debugger{
  private:
-  vector<int> flags;
+  mutable vector<int> flags;
   bool editor_interface;
   string object_name;
  public:
-  bool turned_on;
+  mutable bool turned_on;
   Debugger(){
     this->turned_on=false;
   }
@@ -77,7 +77,7 @@ class Debugger{
       else cout << "Debug: "+object_name+":\tStatus line:\t\t" << current_output << endl;
     }
   }
-  void output(string current_output){
+  void output(string current_output) const{
     if(turned_on){
       if(!(editor_interface)) cout << "\033[1;34mDebug:\033[0m \033[1;31m"+object_name+":\033[0m\tStatus line:\t\t" << current_output << endl;
       else cout << "Debug: "+object_name+":\tStatus line:\t\t" << current_output << endl;

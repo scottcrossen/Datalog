@@ -1,0 +1,9 @@
+Scheme Evaluation
+
+Fact Evaluation
+
+bob
+  A='a'
+
+Query Evaluation
+

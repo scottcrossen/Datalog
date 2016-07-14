@@ -1,0 +1,17 @@
+Scheme Evaluation
+
+Fact Evaluation
+
+f
+  A='1' B='2'
+  A='4' B='3'
+g
+  C='3' D='2'
+r
+  E='1' F='4'
+  E='2' F='5'
+  E='3' F='5'
+  E='4' F='1'
+
+Query Evaluation
+
