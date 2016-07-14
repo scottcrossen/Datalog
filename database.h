@@ -50,7 +50,9 @@ class Database{
   }
   void apply_queries(){
     debug.flag(10);
+    stringstream output;
     
+    current_output=output.str();
     debug.output(11,"Queries applied.");
   }
   void output_file(string file){
@@ -78,21 +80,21 @@ class Database{
     void add(Predicate predicate){
       tuples.insert(predicate.return_parameter_list());
     }
+    bool operator< (const RelationNode& second) const{
+      if(this->node < second.node) return true;
+      else return false;
+    }
+    bool operator> (const RelationNode& second) const{
+      if(this->node > second.node) return true;
+      else return false;
+    }
+    bool operator== (const RelationNode& second) const{
+      if(this->node== second.node) return true;
+      else return false;
+    }
     Parameter node;
     vector<Parameter> columns;
     set<vector<Parameter>> tuples;
-    bool operator< (const RelationNode& second){
-      if(this->node.return_ID() < second.node.return_ID()) return true;
-      else return false;
-    }
-    bool operator> (const RelationNode& second){
-      if(this->node.toString() > second.node.toString()) return true;
-      else return false;
-    }
-    bool operator== (const RelationNode& second){
-      if(this->node.toString()== second.node.toString()) return true;
-      else return false;
-    }
   };
   Debugger debug;
   set<RelationNode> relations;

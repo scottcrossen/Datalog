@@ -17,8 +17,20 @@ class Parameter : public AbstractObject{
   string toString(){
     return ID;
   }
-  string return_ID(){
-    return toString();
+  string return_ID() const{
+    return ID;
+  }
+  bool operator< (const Parameter& second) const{
+    if(this->ID < second.return_ID()) return true;
+    else return false;
+  }
+  bool operator> (const Parameter& second) const{
+    if(this->ID > second.return_ID()) return true;
+    else return false;
+    }
+  bool operator== (const Parameter& second) const{
+    if(this->ID== second.return_ID()) return true;
+    else return false;
   }
  private:
   string ID;

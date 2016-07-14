@@ -33,6 +33,9 @@ int main(int argc, char* argv[]){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file(output_file);
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();

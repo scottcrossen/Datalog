@@ -259,6 +259,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./test_cases/output30.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
@@ -274,6 +277,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./test_cases/output33.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
@@ -289,6 +295,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./test_cases/output35.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
@@ -304,6 +313,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./test_cases/output36.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
@@ -319,6 +331,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./test_cases/output37.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
@@ -334,6 +349,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./test_cases/output61.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
@@ -349,6 +367,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./test_cases/output62.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
@@ -364,6 +385,9 @@ int main(){
   parser.build();
   parser.write_out();
   database.read_in(parser.build_objects());
+  database.output_file("./output.txt");
+  database.apply_queries();
+  database.write_out();
   scanner.clear_tokens();
   parser.clear();
   database.clear();
