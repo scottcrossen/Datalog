@@ -90,6 +90,41 @@ class Database{
     debug.output(15,"Output file written.");
   }
  private:
+  class QueryParam{
+  public:
+    QueryParam(string value){
+      if(value.substr(0,1)=="'"){
+	natural=value;
+	reset_to=value;
+	current_value=value;
+	is_assigned=true;
+      }
+      else {
+	natural=value;
+	reset_to=string();
+	current_value=string();
+	is_assigned=false;
+      }
+    }
+  bool compare(Parameter parameter){
+    if(is_assigned==true)
+      return (current_value==parameter.return_ID());
+    else {
+      current_value=parameter.return_ID();
+      is_assigned=true;
+      return true;
+    }
+  }
+  void reset(){
+    current_value=reset_to;
+    is_assigned=(current_value==natural);
+  }
+  private:
+    string natural;
+    string reset_to;
+    string current_value;
+    bool is_assigned;
+  };
   class RelationNode{
   public:
     RelationNode(){
