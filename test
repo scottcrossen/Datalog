@@ -293,7 +293,6 @@ int main(){
   //debug.output(26, "Test 35 output:");
   //scanner.print();
   parser.output_file("./test_cases/output35.txt");
-  database.build_database();
   parser.read_in(scanner.get_tokens());
   parser.build();
   parser.write_out();
@@ -404,6 +403,6 @@ int main(){
 
   // Finish program:
   debug.flag(32);
-  cout << "Program Compiled Successfully." << endl;
+  cout << "Program Finished Successfully." << endl;
   return 0;
 }
