@@ -61,7 +61,7 @@ class Predicate : public AbstractObject{
   string return_ID(){
     return ID.return_ID();
   }
-  vector<Parameter> return_parameter_list(){
+  vector<Parameter> return_parameter_list() const{
     return parameter_list;
   }
  private:

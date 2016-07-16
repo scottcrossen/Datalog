@@ -63,8 +63,8 @@ class Database{
 	  output <<" "<< (*iter).columns[iter3].return_ID()<<"="<<(*iter2)[iter3].return_ID();
 	output << endl;
       }
+      output<<endl;
     }
-    output << endl;
     current_output+=output.str();
     debug.output(17,"Database created from object.");
   }
@@ -72,7 +72,92 @@ class Database{
     debug.flag(10);
     current_output+="Query Evaluation\n\n";
     stringstream output;
-    
+    vector<Predicate> queries=program.return_queries();
+    for(vector<Predicate>::iterator iter1=queries.begin(); iter1 !=queries.end(); iter1++){
+      vector<string> select;
+      vector<string> project;
+      vector<string> rename;
+      vector<Parameter> current_query=iter1->return_parameter_list();
+      vector<QueryParam*> current_query_param;
+      vector<QueryParam*> delete_list;
+      for(vector<Parameter>::iterator iter2=current_query.begin(); iter2 !=current_query.end(); iter2++){
+	if(iter2->return_ID().substr(0,1)!="'"){
+	  bool found_param=false;
+	  vector<QueryParam*>::iterator iter3;
+	  for(iter3=current_query_param.begin(); iter3 !=current_query_param.end();iter3++)
+	    if ((*iter3)->return_natural() == iter2->return_ID()){
+	      found_param=true;
+	      break;
+	    }
+	  if(found_param) current_query_param.push_back(*iter3);
+	  else{
+	    delete_list.push_back(new QueryParam(iter2->return_ID()));
+	    current_query_param.push_back(delete_list[delete_list.size()-1]);
+	  }
+	}
+	else{
+	  delete_list.push_back(new QueryParam(iter2->return_ID()));
+	  current_query_param.push_back(delete_list[delete_list.size()-1]);
+	}
+      }
+      for(set<RelationNode>::iterator iter2=relations.begin(); iter2 !=relations.end(); iter2++){
+	if(iter2->node.return_ID()==iter1->return_ID()){
+	  for(set<vector<Parameter>>::iterator iter3=(*iter2).tuples.begin(); iter3 !=(*iter2).tuples.end(); iter3++){
+	    for(unsigned iter4=0; iter4< current_query_param.size(); iter4++) current_query_param[iter4]->reset();
+	    bool does_tuple_match=true;
+	    for(unsigned iter4=0; iter4 <current_query_param.size(); iter4++){
+	      does_tuple_match=current_query_param[iter4]->compare((*iter3)[iter4]);
+	      if(!(does_tuple_match)) break;
+	    }
+	    if(does_tuple_match){
+	      stringstream for_debug;
+	      for_debug<< "found match for relation "<<(*iter2).node.return_ID()<<": " << "Query: "<< vec_to_string(current_query_param) <<" Tuple: "<<vec_to_string((*iter3));
+	      debug.output(for_debug.str());
+	      stringstream output_string1;
+	      stringstream output_string2;
+	      stringstream output_string3;
+	      for(unsigned iter4=0; iter4< current_query_param.size(); iter4++) current_query_param[iter4]->reset();
+	      output_string1 <<" ";
+	      for(unsigned iter4=0; iter4<current_query_param.size();iter4++){
+		if(!(current_query_param[iter4]->return_assigned())){
+		  current_query_param[iter4]->compare((*iter3)[iter4]);
+		  output_string2 << " "<<(*iter2).columns[iter4].return_ID()<<"="<< current_query_param[iter4]->return_value();
+		  output_string3 <<" "<<current_query_param[iter4]->return_natural() <<"=" <<current_query_param[iter4]->return_value();
+		}
+		output_string1 << " "<<(*iter2).columns[iter4].return_ID()<<"="<< current_query_param[iter4]->return_value();
+	      }
+	      select.push_back(output_string1.str());
+	      if(output_string2.str().size()!=0)
+		project.push_back(" "+output_string2.str());
+	      if(output_string3.str().size()!=0)
+		rename.push_back(" "+output_string3.str());
+	    }
+	  }
+	}
+      }
+      while (delete_list.size()>0){
+	delete delete_list[delete_list.size()-1];
+	delete_list.pop_back();
+      }
+      output<<(*iter1).toString()<<"? ";
+      if(select.size()==0) output << "No"<<endl;
+      else{
+	output << "Yes("<< select.size()<<")"<<endl;
+	output <<"select" <<endl;
+	for(unsigned iter2=0; iter2<select.size(); iter2++){
+	  output << select[iter2] <<endl;
+	}
+	output <<"project" <<endl;
+	for(unsigned iter2=0; iter2<project.size(); iter2++){
+	  output << project[iter2]<<endl;
+	}
+	output <<"rename" <<endl;
+	for(unsigned iter2=0; iter2<rename.size(); iter2++){
+	  output << rename[iter2]<<endl;
+	}
+      }
+      output <<endl;
+    }
     current_output+=output.str();
     debug.output(11,"Queries applied.");
   }
@@ -119,12 +204,41 @@ class Database{
     current_value=reset_to;
     is_assigned=(current_value==natural);
   }
+  bool operator== (const QueryParam& second) const{
+    if(this->return_natural()== second.return_natural()) return true;
+    else return false;
+  }
+  string return_natural() const{
+    return natural;
+  }
+  string return_value() const{
+    return current_value;
+  }
+  bool return_assigned() const{
+    return is_assigned;
+  }
   private:
     string natural;
     string reset_to;
     string current_value;
     bool is_assigned;
   };
+  string vec_to_string(vector<Parameter> vec){
+    stringstream output;
+    output <<"(";
+    for(unsigned iter=0; iter<vec.size()-1;iter++)
+      output << vec[iter].return_ID()<<",";
+    output << vec[vec.size()-1].return_ID() << ")";
+    return output.str();
+  }
+  string vec_to_string(vector<QueryParam*> vec){
+    stringstream output;
+    output <<"(";
+    for(unsigned iter=0; iter<vec.size()-1;iter++)
+      output << vec[iter]->return_natural()<<",";
+    output << vec[vec.size()-1]->return_natural() << ")";
+    return output.str();
+  }
   class RelationNode{
   public:
     RelationNode(){

@@ -7,3 +7,11 @@ bob
 
 Query Evaluation
 
+bob(X)? Yes(1)
+select
+  A='a'
+project
+  A='a'
+rename
+  X='a'
+
