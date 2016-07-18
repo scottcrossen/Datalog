@@ -1,0 +1,405 @@
+
+
+<html>
+<head>
+    <title>Datalog Parser</title>
+    <link rel="stylesheet" type="text/css" href="../include/style.css" />
+</head>
+<body>
+
+
+
+<div class="box">
+<h1>Computer Science 236</h1>
+</div>
+
+<div class="main">
+
+<div class="center">
+<h2>
+Datalog Parser
+</h2>
+</div>
+<hr>
+
+<p>
+Note: Projects are to be completed by each student individually
+(not by groups of students).
+</p>
+
+
+<p>
+Write a parser that reads a datalog program from a text file,
+builds a data structure that represents the datalog program,
+and outputs the contents of the datalog program data structure.
+</p>
+
+
+
+<h3>
+Example Input
+</h3>
+
+<pre>
+Schemes:
+  snap(S,N,A,P)
+  HasSameAddress(X,Y)
+
+Facts:
+  snap('12345','C. Brown','12 Apple','555-1234').
+  snap('33333','Snoopy','12 Apple','555-1234').
+
+Rules:
+  HasSameAddress(X,Y) :- snap(A,X,B,C),snap(D,Y,B,E).
+
+Queries:
+  HasSameAddress('Snoopy',Who)?
+</pre>
+
+  
+  
+<h3>
+Example Output
+</h3>
+
+<pre>
+Success!
+Schemes(2):
+  snap(S,N,A,P)
+  HasSameAddress(X,Y)
+Facts(2):
+  snap('12345','C. Brown','12 Apple','555-1234')
+  snap('33333','Snoopy','12 Apple','555-1234')
+Rules(1):
+  HasSameAddress(X,Y) :- snap(A,X,B,C),snap(D,Y,B,E)
+Queries(1):
+  HasSameAddress('Snoopy',Who)
+Domain(6):
+  '12 Apple'
+  '12345'
+  '33333'
+  '555-1234'
+  'C. Brown'
+  'Snoopy'
+</pre>
+  
+
+
+<h3>
+Testing
+</h3>
+
+<p>
+Here are some ideas for tests.
+</p>
+
+<ol>
+<li>
+A program with extra tokens at the end of the file.
+<li>
+A program that uses the wrong punctuation.
+<li>
+A program that has missing punctuation.
+<li>
+A program with empty fact or rule lists.
+<li>
+A program with empty scheme or query lists.
+<li>
+A program with schemes, facts, rules, queries in the wrong order.
+</ol>
+
+
+
+<h3>
+Design
+</h3>
+
+<p>
+You will build a datalog interpreter in later projects.
+The datalog interpreter will need to access the datalog
+program data structure created by the parser.
+The data structures should be designed such that
+the datalog interpreter is able to easily get
+the lists of schemes, facts, rules and queries
+from the parser.
+</p>
+
+
+
+<h3>
+The Datalog Grammar
+</h3>
+
+<p>
+The Datalog Grammar defines valid datalog programs.
+Use the grammar to write a recursive-descent parser
+for datalog programs.
+Use the scanner from the previous project
+to provide input tokens for the parser.
+</p>
+
+<p>
+The nonterminals in the grammar
+begin with a lower-case letter.
+Terminal symbols in the grammar
+are written in all upper-case letters.
+The word 'epsilon' in the grammar
+represents the empty string.
+</p>
+     
+<pre>
+
+datalogProgram	->	SCHEMES COLON scheme schemeList
+		        FACTS COLON factList
+		        RULES COLON ruleList
+		        QUERIES COLON query queryList
+
+schemeList	->	scheme schemeList
+schemeList	->	epsilon
+
+factList	->	fact factList
+factList	->	epsilon
+
+ruleList	->	rule ruleList
+ruleList	->	epsilon
+
+queryList	->	query queryList
+queryList	->	epsilon
+
+scheme   	-> 	predicate
+fact    	-> 	predicate PERIOD
+rule    	->	predicate COLON_DASH predicate predicateList PERIOD
+query	        ->      predicate Q_MARK
+
+predicateList	->	COMMA predicate predicateList
+predicateList	->	epsilon
+	
+predicate	->	ID LEFT_PAREN parameter parameterList RIGHT_PAREN
+	
+parameterList	-> 	COMMA parameter parameterList
+parameterList	-> 	epsilon
+	
+parameter	->	STRING
+parameter	->	ID
+
+</pre>
+
+
+ 
+<h3>
+Datalog Program Data Structures
+</h3>
+
+<p>
+A datalog program consists of lists
+of schemes, facts, rules and queries.
+You are encouraged to use the 'vector'
+class from the library for these lists.
+Please do not write your own list class.
+</p>
+
+<p>
+You do need to write classes for the
+schemes, facts, rules, and queries
+that are stored on the lists.
+Because schemes, facts, and queries
+all have the same form as predicates,
+one class named Predicate can be used
+to represent all of these types of objects.
+You don't need classes named Scheme, Fact, and Query.
+Schemes, facts, and queries can (and should)
+be stored in Predicate objects.
+</p>
+
+<p>
+You are required to have the following classes:
+DatalogProgram, Rule, Predicate, and Parameter.
+You may also have others, but you must have these.
+</p>
+
+<p>
+Write a toString method for each of these classes
+so that you can easily print them out.
+Return a DatalogProgram object from the parser
+and then traverse this structure and use toString
+as needed to print the required output.
+</p>
+
+<p>
+To integrate this project with later projects,
+be sure to have a way to get the lists
+of schemes, facts, rules and queries
+out of the DatalogProgram.
+</p>
+
+ 
+ 
+<h3>
+Output Format
+</h3>
+
+<p>
+If the parse is successful,
+output 'Success!' followed by the lists of
+schemes, facts, rules, queries in the datalog program.
+Output the number of items in each list
+as shown in the example output.
+Indent each list item by 2 spaces.
+Output the schemes, facts, rules, and queries in
+the same order in which they appear in the input.
+</p>
+
+<p>
+Also output the set of the domain values
+that appear in the datalog program.
+The domain values are the strings
+(surrounded by quotes) that appear in the input.
+Note that the domain is a set of strings.
+(The same string is not printed more than once.)
+Output the domain strings in sorted order.
+(Sort the strings based on the characters inside
+the strings, not including the quotes.)
+</p>
+ 
+
+
+<h3>
+Syntax Errors
+</h3>
+
+<p>
+If the parse is unsuccessful,
+output 'Failure!' followed by the offending token.
+Output the type, value, and line number of the token
+surrounded by parentheses and indented by 2 spaces
+on a new line of output.
+Note that the parser stops after encountering
+the first offending token.
+</p>
+
+
+
+<h4>
+Example Input
+</h4>
+
+<pre>
+Schemes:
+    snap(S,N,A,P) 
+    NameHasID(N,S)
+ 
+Facts:
+    snap('12345','C. Brown','12 Apple','555-1234').
+    snap('67890','L. Van Pelt','34 Pear','555-5678').
+ 
+Rules:
+    NameHasID(N,S) :- snap(S,N,A,P)?
+ 
+Queries:
+    NameHasID('Snoopy',Id)?
+</pre>
+ 
+
+  
+<h4>
+Example Output
+</h4>
+
+<pre>
+Failure!
+  (Q_MARK,"?",10)
+</pre>
+
+
+
+<h3>
+Implementation Requirements
+</h3>
+
+<ol>
+
+<li>
+You must implement a deterministic top-down parser that
+chooses the rule to expand based on the current token.
+
+<li>
+You must implement the parser
+using the recursive-descent approach.
+
+<li>
+You must use the scanner from the previous project
+to read tokens from the input.
+
+<li>
+You must create classes for
+DatalogProgram, Rule, Predicate, and Parameter
+to hold the internal representation of a datalog program.
+Each class must have a toString method
+and the output of the program must be formed by
+these toString methods (not by the parse methods).
+
+<li>
+The parser must run to completion
+with a normal exit status for any input.
+Do not terminate with a non-zero exit status for any input,
+including inputs that have errors.
+</ol>
+
+
+
+<h3>
+Implementation Suggestions
+</h3>
+
+<ol>
+<li>
+A good approach is to complete the project in three steps:
+
+<ul>
+<li>
+   First: write a parser that only checks syntax.
+      (Does not build any data structures.)
+
+<li>
+   Second: write classes for data structures.
+      (Rule, Predicate, Parameter, etc)
+
+<li>
+   Third: add code to the parser to create data structures.
+      This can be done easily without modifying the lines
+      of code that were created in the first step.
+      For example when a parameter is being parsed a
+      Parameter object is created and added to the
+      current list of parameters stored in the Parser.
+</ul>
+
+<li>
+A good approach is to use exceptions to handle syntax errors.
+Throw an exception when the parser detects a syntax error.
+Catch the exception at the top level of the parser
+to report either success or failure.
+(Don't return a boolean from each parsing routine to indicate
+a syntax error because then each return value must be checked
+resulting in more complicated code.)
+
+<li>
+A good approach is to make a Parameter object
+capable of holding both a 'name' and a 'value'.
+The object holds a 'name' if the parameter is a variable
+and a 'value' if the parameter is a constant.
+
+<li>
+Don't store token types in the data structures
+created by the parser.
+The data structures created by the parser should be
+decoupled from both the scanner and the parser.
+</ol>
+
+
+
+</div>
+
+</body>
+</html>
+
+

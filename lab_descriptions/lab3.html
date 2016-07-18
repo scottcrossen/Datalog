@@ -1,0 +1,468 @@
+
+
+<html>
+<head>
+    <title>The Relational Database</title>
+    <link rel="stylesheet" type="text/css" href="../include/style.css" />
+</head>
+<body>
+
+
+
+<div class="box">
+<h1>Computer Science 236</h1>
+</div>
+
+<div class="main">
+
+<div class="center">
+<h2>
+The Relational Database
+</h2>
+</div>
+<hr>
+
+<p>
+Note: Projects are to be completed by each student individually
+(not by groups of students).
+</p>
+
+
+<p>
+Write an interpreter that uses relational database
+operations to evaluate the queries in a Datalog Program.
+For this project, use only the facts to evaluate the queries.
+(The evaluation of rules will be added in the next project.)
+</p>
+
+
+
+<h3>
+Example Input
+</h3>
+
+<pre>
+Schemes:
+  SK(A,B)
+Facts:
+  SK('a','c').
+  SK('b','c').
+  SK('b','b').
+  SK('b','c').
+Rules:
+
+Queries:
+  SK(A,'c')?
+  SK('b','c')?
+  SK(X,X)?
+  SK(A,B)?
+  SK('c','c')?
+</pre>
+
+  
+<h3>
+Example Output
+</h3>
+
+<pre>
+Scheme Evaluation
+
+Fact Evaluation
+
+SK
+  A='a' B='c'
+  A='b' B='b'
+  A='b' B='c'
+
+Query Evaluation
+
+SK(A,'c')? Yes(2)
+select
+  A='a' B='c'
+  A='b' B='c'
+project
+  A='a'
+  A='b'
+rename
+  A='a'
+  A='b'
+
+SK('b','c')? Yes(1)
+select
+  A='b' B='c'
+project
+rename
+
+SK(X,X)? Yes(1)
+select
+  A='b' B='b'
+project
+  A='b'
+rename
+  X='b'
+
+SK(A,B)? Yes(3)
+select
+  A='a' B='c'
+  A='b' B='b'
+  A='b' B='c'
+project
+  A='a' B='c'
+  A='b' B='b'
+  A='b' B='c'
+rename
+  A='a' B='c'
+  A='b' B='b'
+  A='b' B='c'
+
+SK('c','c')? No
+
+</pre>
+
+ 
+ 
+<h3>
+Testing
+</h3>
+
+<p>
+Here are some ideas for tests.
+</p>
+
+<ol>
+<li>
+A program with an empty fact list.
+<li>
+A program with a duplicate fact.
+<li>
+A query with a variable name listed more than once.
+</ol>
+
+
+
+<h3>
+The Database Classes
+</h3>
+
+<p>
+The solution for this project has two main parts,
+(1) a simple relational database and
+(2) an interpreter that uses the database to evaluate queries.
+</p>
+ 
+<p>
+A relational database is a collection of relations.
+A relation has a name, a scheme, and a set of tuples.
+A scheme is a list of attribute names.
+A tuple is a list of attribute values.
+Relations are used as operands in relational operations
+such as select, project, and rename.
+</p>
+
+<p>
+In this project a Datalog program is represented by a database.
+Each scheme in the program defines a relation in the database.
+Each fact in the program defines a tuple in a relation.
+</p>
+
+<p>
+Write classes that implement a simple relational database.
+Your design must include at least the following classes:
+Database, Relation, Scheme, and Tuple.
+Provide functions in the Relation class for each of the
+relational operations (select, project, and rename).
+Each of these functions operates on an existing relation
+and returns a new Relation (the result of the operation).
+</p>
+
+<p>
+The Relation class must use a set data type
+to hold the tuples in the relation.
+</p>
+
+<p>
+Test your database classes before combining them with
+the query interpreter described in the next section.
+</p>
+
+<p>
+Decouple the database classes from the Datalog classes.
+For example, don't have Tuples that contain Parameters.
+</p>
+
+
+ 
+<h3>
+Datalog Program Evaluation
+</h3>
+
+<p>
+Use the relational database classes to evaluate
+the Datalog program using these major steps:
+</p>
+
+<ol>
+<li>
+Evaluate the schemes.
+<li>
+Evaluate the facts.
+<li>
+Evaluate the queries.
+</ol>
+
+ 
+<h3>
+Evaluating Schemes
+</h3>
+
+<p>
+Start with an empty Database.
+For each scheme in the Datalog program,
+add an empty Relation to the Database.
+Use the scheme name as the name of the relation and
+the attribute list from the scheme as the scheme of the relation.
+</p>
+
+
+<h3>
+Scheme Evaluation Output
+</h3>
+
+<p>
+Output a line with the text 'Scheme Evaluation'
+followed by a blank line.
+</p>
+
+
+<h3>
+Evaluating Facts
+</h3>
+
+<p>
+For each fact in the Datalog program,
+add a Tuple to a Relation.
+Use the predicate name from the fact to determine
+the Relation to which the Tuple should be added.
+Use the values listed in the fact
+to provide the values for the Tuple.
+</p>
+
+
+<h3>
+Fact Evaluation Output
+</h3>
+
+<p>
+Output a line with the text 'Fact Evaluation'
+followed by a blank line,
+followed by the contents of the relations in the database.
+</p>
+
+<p>
+For each relation,
+output the name of the relation on a line by itself,
+followed by the tuples contained in the relation,
+followed by a blank line.
+</p>
+
+<p>
+Output each tuple on a separate line
+as a space-separated list of pairs.
+Each pair has the form N='V',
+where N is the attribute name from the scheme
+and V is the value from the tuple.
+Output the name-value pairs
+in the same order as the attribute names
+in the scheme of the relation.
+Indent the output of each tuple by two spaces.
+</p>
+
+<p>
+Output the relations in sorted order.
+Sort the relations alphabetically by the name of the relation.
+</p>
+
+<p>
+Output the tuples in sorted order.
+Sort the tuples alphabetically based on the values in the tuples.
+Sort first by the value in the first position
+and if needed up to the value in the nth position.
+</p>
+
+
+<h3>
+Evaluating Queries
+</h3>
+
+<p>
+For each query in the Datalog program,
+use a sequence of select, project, and rename operations
+on the Database to evaluate the query.
+Evaluate the queries in the order given in the input.
+</p>
+
+<ol>
+<li>
+Get the Relation from the Database
+with the same name as the predicate name in the query.
+
+<li>
+Use the select operation to select the tuples
+from the Relation that match the query.
+Iterate over the parameters of the query:
+If the parameter is a constant,
+select the tuples from the Relation
+that have the same value as the parameter
+in the same position as the parameter.
+If the parameter is a variable and
+the same variable appears later in the query,
+select the tuples from the Relation
+that have the same value in both positions
+where the variable appears.
+
+<li>
+After selecting the matching tuples,
+use the project operation to keep only
+the columns from the Relation that correspond
+to the positions of the variables in the query.
+Make sure that each variable name appears only
+once in the resulting relation.
+
+<li>
+After projecting,
+use the rename operation to
+rename the scheme of the Relation
+to the names of the variables found in the query. 
+</ol>
+
+
+<h3>
+Query Evaluation Output
+</h3>
+
+<p>
+For each query, output the query and a space.
+If the relation resulting from evaluating
+the query is empty, output 'No'.
+If the resulting relation is not empty, output 'Yes(n)'
+where n is the number of tuples in the resulting relation.
+</p>
+
+<p>
+If the result of the query evaluation is 'Yes'
+output the tuples that result from
+the three steps of the query evaluation.
+</p>
+
+<ol>
+<li>
+Output the text 'select' on a line by itself
+followed by the tuples that result from the select step.
+
+<li>
+Output the text 'project' on a line by itself
+followed by the tuples that result from the project step.
+
+<li>
+Output the text 'rename' on a line by itself
+followed by the tuples that result from the rename step.
+</ol>
+
+<p>
+Output each tuple in the same form as described
+in the Fact Evaluation Output section.
+</p>
+
+<p>
+Output a blank line following the output of each query.
+</p>
+
+
+
+<h3>
+Implementation Requirements
+</h3>
+
+<ol>
+<li>
+You are required to use a relational database
+approach in solving the problem in this project.
+You must create tuples in relations and evaluate queries
+using select, project, and rename operations.
+
+<li>
+Your solution must include the following classes:
+Database, Relation, Scheme, and Tuple.
+
+<li>
+The Relation class must use a set data type
+to hold the tuples in the relation.
+
+<li>
+The relational operations (select, project, and rename)
+must be implemented as functions in the Relation class.
+ 
+<li>
+Queries must be evaluated using relational operations
+(select, project, and rename).
+
+<li>
+The relational operators must not produce relations
+with duplicate tuples or duplicate names in the scheme.
+
+</ol> 
+
+
+
+<h3>
+Implementation Suggestions
+</h3>
+
+<ol>
+<li>
+<h4>
+Select
+</h4>
+
+<p>
+The select function could take two parameters,
+a position and a value.
+The given position in a tuple would need to
+have a value equal to the given value
+for that tuple to be included in the result.
+</p>
+
+<p>
+Another select function could take two parameters
+that are both positions.
+The two given positions in a tuple
+would need to have equal values
+for that tuple to be included in the result.
+</p>
+
+<li>
+<h4>
+Project
+</h4>
+
+<p>
+The parameter to the project function could be 
+a list of the positions of the columns
+that should be included in the result.
+</p>
+
+<p>
+The project function needs to be able to
+change the order of the columns in a relation
+to support evaluating rules in the next project.
+</p>
+</ol>
+
+
+
+</div>
+
+</body>
+</html>
+
+
