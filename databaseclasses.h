@@ -91,10 +91,24 @@ class RelationNode{
     this->tuples=tuples;
   }
   RelationNode operatorU (const RelationNode& second){
-    debug.abort(3, this->columns != second.columns);
+    //debug.abort(3, this->columns != second.columns);
     RelationNode output=(*this);
-    for(set<vector<Parameter>>::iterator iter1=second.tuples.begin(); iter1 !=second.tuples.end(); iter1++)
+    second_relation=second.project((*this).columns);
+    for(set<vector<Parameter>>::iterator iter1=second_relation.tuples.begin(); iter1 !=second_relation.tuples.end(); iter1++)
       output.tuples.insert(*iter1);
+    return output;
+  }
+  RelationNode project(vector<Parameter> columns){
+    RelationNode output=(*this);
+    for(set<vector<Parameter>>::iterator iter1=output.tuples.begin(); iter1 !=output.tuples.end(); iter1++){
+      vector<Parameter> this_line;
+      for(unsigned iter2=0; iter2 < columns.size(); iter2++){
+	for(unsigned iter3=0; iter3 < (*this).columns.size(); iter3++)
+	  if(columns[iter2].return_ID()==(*this).columns[iter3].return_ID())
+	    this_line.push_back((*iter1)[iter3]);
+      }
+      (*iter1)=this_line;
+    }
     return output;
   }
   RelationNode operatorX (const RelationNode& second){
@@ -106,7 +120,7 @@ class RelationNode{
     // First create the vectors that should match to make a new tuple
     for(vector<Parameter>::iterator iter1=this->columns.begin(); iter1 !=this->columns.begin(); iter1++){
       bool found_match=false;
-      for(vector<QueryParam*>::iterator iter2=new_columns.begin(); iter2 != new_culmns.end();iter2++)
+      for(vector<QueryParam*>::iterator iter2=new_columns.begin(); iter2 != new_columns.end();iter2++)
 	if ((*iter1).return_ID() == (*iter2)->return_natural()){
 	  found_match=true;
 	  first_columns.push_back(*iter2);
@@ -118,9 +132,9 @@ class RelationNode{
 	first_columns.push_back(new_queryparam);
       }
     }
-    for(vector<Parameter>::iterator iter1=second.columns.begin(); iter1 !=second.columns.begin(); iter1++){
+    for(vector<Parameter>::const_iterator iter1=second.columns.begin(); iter1 !=second.columns.begin(); iter1++){
       bool found_match=false;
-      for(vector<QueryParam*>::iterator iter2=new_columns.begin(); iter2 != new_culmns.end();iter2++)
+      for(vector<QueryParam*>::iterator iter2=new_columns.begin(); iter2 != new_columns.end();iter2++)
 	if ((*iter1).return_ID() == (*iter2)->return_natural()){
 	  found_match=true;
 	  second_columns.push_back(*iter2);
@@ -135,8 +149,8 @@ class RelationNode{
     // Iterate through set and add matching tuples.
     for(set<vector<Parameter>>::iterator iter1=this->tuples.begin();iter1 !=this->tuples.end();iter1++)
       for(set<vector<Parameter>>::iterator iter2=second.tuples.begin();iter2 !=second.tuples.end();iter2++){
-	for(vector<QueryParam>::iterator iter3=new_columns.begin(); iter3 !=new_columns.end(); iter3++)
-	  iter3->reset();
+	for(vector<QueryParam*>::iterator iter3=new_columns.begin(); iter3 !=new_columns.end(); iter3++)
+	  (*iter3)->reset();
 	bool matches=true;
 	for(unsigned iter3=0;iter3<first_columns.size();iter3++){
 	  matches=first_columns[iter3]->compare((*iter1)[iter3]);
@@ -149,16 +163,24 @@ class RelationNode{
 	}
 	if(matches){
 	  vector<Parameter> add_tuple;
-	  for(vector<QueryParam>::iterator iter3=new_columns.begin(); iter3 !=new_columns.end(); iter3++)
-	    add_tuple.push_back(Parameter(iter3->return_value()));
+	  for(vector<QueryParam*>::iterator iter3=new_columns.begin(); iter3 !=new_columns.end(); iter3++)
+	    add_tuple.push_back(Parameter((*iter3)->return_value()));
 	  output.tuples.insert(add_tuple);
 	}
       }
-    for(vector<QueryParam>::iterator iter1=new_columns.begin(); iter1 !=new_columns.end(); iter1++){
-      output.columns.push_back(Parameter(QueryParam(iter1->return_natural())));
+    for(vector<QueryParam*>::iterator iter1=new_columns.begin(); iter1 !=new_columns.end(); iter1++){
+      output.columns.push_back(Parameter((*iter1)->return_natural()));
       delete (*iter1);
     }
     return output;
+  }
+  void rename(vector<Parameter> columns){
+    this columns->columns;
+  }
+  RelationNode rho(vector<Parameter> columns){
+    RelationNode output;
+    output=(*this);
+    output.rename(vector<Parameter> columns);
   }
   void debug_on(bool turn_on) const{
     debug.turned_on=turn_on;

@@ -103,6 +103,35 @@ class Database{
     current_output+=output.str();
     debug.output(18,"Queries applied.");
   }
+  void apply_rules(){
+    debug.flag(37);
+    current_output+="Query Evaluation\n\n";
+    stringstream output;
+    vector<Rules> rules=program.return_rules();
+    //repeat this untill no changes
+    for(vector<Rules>::iterator iter1=rules.begin(); iter1 !=rules.end(); iter1++){
+      for(set<RelationNode>::iterator iter2=relations.begin(); iter2 !=relations.end(); iter2++){
+	if((*iter2).node.return_ID()==(*iter1).return_rule().return_ID()){
+	  rule_join=RelationNode();
+	  for(set<RelationNode>::iterator iter3=relations.begin(); iter3 !=relations.end(); iter3++){
+	    if((*iter3).node.return_ID()==(*iter1).return_predicates()[0].return_ID()){
+	      rule_join=(*iter3);
+	      break;
+	    }
+	  }
+	  for(vector<Predicate>::iterator iter3=(*iter1).return_predicates().begin()+1; iter3 !=(*iter1).return_predicates().end(); iter3++)
+	    for(set<RelationNode>::iterator iter4=relations.begin(); iter4 !=relations.end(); iter4++){
+	      if((*iter4).node.return_ID()==(*iter3).return_ID()){
+		rule_join=rule_join X (*iter4).rho((*iter3).return_parameter_list());
+		break;
+	      }
+	    }
+	  (*iter2) U rule_join;
+	  break;
+	}
+      }
+    }
+  }
   void output_file(string file){
     debug.flag(19);
     out_file=file;
