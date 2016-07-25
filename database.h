@@ -67,6 +67,12 @@ class Database{
       if(!(found_relation)) debug.abort(18);
     }
     debug.flag(15);
+    current_output+=output.str();
+    display_database();
+    debug.output(16,"Facts Added");
+  }
+  void display_database(){
+    stringstream output;
     for(set<RelationNode>::iterator iter=relations.begin(); iter!=relations.end(); iter++){
       output<< (*iter).node.return_ID() <<endl;
       for(set<vector<Parameter>>::iterator iter2=(*iter).tuples.begin(); iter2 != (*iter).tuples.end(); iter2++){
@@ -78,7 +84,6 @@ class Database{
       output<<endl;
     }
     current_output+=output.str();
-    debug.output(16,"Facts Added");
   }
   void apply_queries(){
     debug.flag(17);
@@ -105,32 +110,36 @@ class Database{
   }
   void apply_rules(){
     debug.flag(37);
-    current_output+="Query Evaluation\n\n";
+    current_output+="Rule Evaluation\n\n";
     stringstream output;
-    vector<Rules> rules=program.return_rules();
-    //repeat this untill no changes
-    for(vector<Rules>::iterator iter1=rules.begin(); iter1 !=rules.end(); iter1++){
-      for(set<RelationNode>::iterator iter2=relations.begin(); iter2 !=relations.end(); iter2++){
-	if((*iter2).node.return_ID()==(*iter1).return_rule().return_ID()){
-	  rule_join=RelationNode();
-	  for(set<RelationNode>::iterator iter3=relations.begin(); iter3 !=relations.end(); iter3++){
-	    if((*iter3).node.return_ID()==(*iter1).return_predicates()[0].return_ID()){
-	      rule_join=(*iter3);
+    vector<Rule> rules=program.return_rules();
+    unsigned converge_step=0;
+    bool converged=false;
+    while(!(converged) && converge_step<30){
+      converge_step++;
+      converged=true;
+      for(vector<Rule>::iterator iter1=rules.begin(); iter1 !=rules.end(); iter1++){
+	debug.output("Applying rule: "+(*iter1).toString());
+	if((*iter1).return_predicates().size() !=0)
+	  //debug.output("This rule has ID: "+(*iter1).return_rule().return_ID());
+	  for(set<RelationNode>::iterator iter2=relations.begin(); iter2 !=relations.end(); iter2++){
+	    if((*iter2).node.return_ID()==(*iter1).return_rule().return_ID()){
+	      RelationNode rule_join=RelationNode();
+	      apply_current_rule(output, converged, iter1, iter2, rule_join);
+	      print_new_tuples(output, converged, iter1, iter2, rule_join);
+	      //debug.output(output.str());
+	      //output << endl;
 	      break;
 	    }
 	  }
-	  for(vector<Predicate>::iterator iter3=(*iter1).return_predicates().begin()+1; iter3 !=(*iter1).return_predicates().end(); iter3++)
-	    for(set<RelationNode>::iterator iter4=relations.begin(); iter4 !=relations.end(); iter4++){
-	      if((*iter4).node.return_ID()==(*iter3).return_ID()){
-		rule_join=rule_join X (*iter4).rho((*iter3).return_parameter_list());
-		break;
-	      }
-	    }
-	  (*iter2) U rule_join;
-	  break;
-	}
       }
     }
+    output << endl <<"Converged after " << converge_step << " passes through the Rules." << endl <<endl;
+    current_output+=output.str();
+    display_database();
+    stringstream debug_output;
+    debug_output <<"Converged after "<<converge_step <<" steps";
+    debug.output(debug_output.str());
   }
   void output_file(string file){
     debug.flag(19);
@@ -146,25 +155,52 @@ class Database{
     debug.output(22,"Output file written.");
   }
  private:
-  string vec_to_string(vector<Parameter> vec){
-    debug.flag(23);
-    stringstream output;
-    output <<"(";
-    for(unsigned iter=0; iter<vec.size()-1;iter++)
-      output << vec[iter].return_ID()<<",";
-    output << vec[vec.size()-1].return_ID() << ")";
-    debug.flag(24);
-    return output.str();
+  void print_new_tuples(stringstream &output, bool &converged, vector<Rule>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join){
+    for(set<vector<Parameter>>::iterator iter3=rule_join.tuples.begin(); iter3 !=rule_join.tuples.end(); iter3++)
+      debug.output("Added "+vec_to_string(*iter3)+" with type "+rule_join.node.return_ID()+vec_to_string(rule_join.columns)+" to relation "+(*iter2).node.return_ID()+vec_to_string((*iter1).return_rule().return_parameter_list()));
+    //(*iter2).u(rule_join);
+    RelationNode temporary=(*iter2);
+    if((*iter2).uni((*iter1).return_rule().return_parameter_list(),rule_join))
+      converged=false;
+    output<< (*iter1).toString() <<endl;
+    for(set<vector<Parameter>>::iterator iter3=(*iter2).tuples.begin(); iter3 != (*iter2).tuples.end(); iter3++){
+      bool found_match=false;
+      for(set<vector<Parameter>>::iterator iter4=temporary.tuples.begin(); iter4 != temporary.tuples.end(); iter4++)
+	if((*iter4)==(*iter3)){ found_match=true; break;}
+      if(!(found_match)){
+	output << " ";
+	for(unsigned iter4=0; iter4 < (*iter2).columns.size(); iter4++)
+	  output <<" "<< (*iter2).columns[iter4].return_ID()<<"="<<(*iter3)[iter4].return_ID();
+	output << endl;
+      }
+    }
   }
-  string vec_to_string(vector<QueryParam*> vec){
-    debug.flag(23);
-    stringstream output;
-    output <<"(";
-    for(unsigned iter=0; iter<vec.size()-1;iter++)
-      output << vec[iter]->return_natural()<<",";
-    output << vec[vec.size()-1]->return_natural() << ")";
-    debug.flag(24);
-    return output.str();
+  void apply_current_rule(stringstream &output, bool &converged, vector<Rule>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join){
+    //debug.output("Found matching relation");	      
+    debug.output("Attempting to join relation "+(*iter1).return_predicates()[0].toString());
+    for(set<RelationNode>::iterator iter3=relations.begin(); iter3 !=relations.end(); iter3++){
+      if((*iter3).node.return_ID()==(*iter1).return_predicates()[0].return_ID()){
+	rule_join=(*iter3).sigma((*iter1).return_predicates()[0].return_parameter_list());
+	stringstream debug_output;
+	debug_output <<"Found matching relation with tuple size "<<(*iter3).tuples.size();
+	debug_output << ". Current join has tuple size "<< rule_join.tuples.size() << " and ID "<<rule_join.node.return_ID();
+	debug.output(debug_output.str());
+	break;
+      }
+    }
+    for(unsigned iter3=1; iter3 <(*iter1).return_predicates().size();iter3++){
+      debug.output("Attempting to join relation "+(*iter1).return_predicates()[iter3].toString());
+      for(set<RelationNode>::iterator iter4=relations.begin(); iter4 !=relations.end(); iter4++){
+	if((*iter4).node.return_ID()==(*iter1).return_predicates()[iter3].return_ID()){
+	  rule_join=rule_join.x((*iter4).sigma((*iter1).return_predicates()[iter3].return_parameter_list()));
+	  stringstream debug_output;
+	  debug_output <<"Found matching relation with tuple size "<<(*iter4).tuples.size();
+	  debug_output << ". Current join has tuple size "<< rule_join.tuples.size()<<" and ID "<< rule_join.node.return_ID();
+	  debug.output(debug_output.str());
+	  break;
+	}
+      }
+    }
   }
   void write_query_out(vector<string> &select, vector<string> &project, vector<string> &rename, vector<Predicate>::iterator &iter1, stringstream &output){
     debug.flag(25);
@@ -191,8 +227,8 @@ class Database{
   void tuple_matches(vector<Parameter> &current_query, vector<QueryParam*> &current_query_param, vector<QueryParam*> &delete_list, vector<string> &select, vector<string> &project, vector<string> &rename, set<RelationNode>::iterator &iter2, set<vector<Parameter>>::iterator &iter3){
     debug.flag(27);
     stringstream for_debug;
-    for_debug<< "found match for relation "<<(*iter2).node.return_ID()<<": " << "Query: "<< vec_to_string(current_query_param) <<" Tuple: "<<vec_to_string((*iter3));
-    debug.output(for_debug.str());
+    //for_debug<< "found match for relation "<<(*iter2).node.return_ID()<<": " << "Query: "<< vec_to_string(current_query_param) <<" Tuple: "<<vec_to_string((*iter3));
+    //debug.output(for_debug.str());
     stringstream output_string1;
     stringstream output_string2;
     stringstream output_string3;
