@@ -1,0 +1,504 @@
+
+
+<html>
+<head>
+    <title>The Datalog Interpreter</title>
+    <link rel="stylesheet" type="text/css" href="../include/style.css" />
+</head>
+<body>
+
+
+
+<div class="box">
+<h1>Computer Science 236</h1>
+</div>
+
+<div class="main">
+
+<div class="center">
+<h2>
+The Datalog Interpreter
+</h2>
+</div>
+<hr>
+
+<p>
+Note: Projects are to be completed by each student individually
+(not by groups of students).
+</p>
+
+
+<p>
+Add join and union operations to the
+relational database from the last project
+and use the new operations to evaluate
+the rules in a Datalog program.
+</p>
+ 
+
+
+<h3>
+Example Input
+</h3>
+
+<pre>
+Schemes:
+  snap(S,N,A,P)
+  csg(C,S,G)
+  cn(C,N)
+  ncg(N,C,G)
+
+Facts:
+  snap('12345','C. Brown','12 Apple St.','555-1234').
+  snap('22222','P. Patty','56 Grape Blvd','555-9999').
+  snap('33333','Snoopy','12 Apple St.','555-1234').
+  csg('CS101','12345','A').
+  csg('CS101','22222','B').
+  csg('CS101','33333','C').
+  csg('EE200','12345','B+').
+  csg('EE200','22222','B').
+
+Rules:
+  cn(c,n) :- snap(S,n,A,P),csg(c,S,G).
+  ncg(n,c,g) :- snap(S,n,A,P),csg(c,S,g).
+
+Queries:
+  cn('CS101',Name)?
+  ncg('Snoopy',Course,Grade)?
+</pre>
+
+
+  
+<h3>
+Example Output
+</h3>
+
+<pre>
+Scheme Evaluation
+
+Fact Evaluation
+
+cn
+
+csg
+  C='CS101' S='12345' G='A'
+  C='CS101' S='22222' G='B'
+  C='CS101' S='33333' G='C'
+  C='EE200' S='12345' G='B+'
+  C='EE200' S='22222' G='B'
+
+ncg
+
+snap
+  S='12345' N='C. Brown' A='12 Apple St.' P='555-1234'
+  S='22222' N='P. Patty' A='56 Grape Blvd' P='555-9999'
+  S='33333' N='Snoopy' A='12 Apple St.' P='555-1234'
+
+Rule Evaluation
+
+cn(c,n) :- snap(S,n,A,P),csg(c,S,G)
+  C='CS101' N='C. Brown'
+  C='CS101' N='P. Patty'
+  C='CS101' N='Snoopy'
+  C='EE200' N='C. Brown'
+  C='EE200' N='P. Patty'
+ncg(n,c,g) :- snap(S,n,A,P),csg(c,S,g)
+  N='C. Brown' C='CS101' G='A'
+  N='C. Brown' C='EE200' G='B+'
+  N='P. Patty' C='CS101' G='B'
+  N='P. Patty' C='EE200' G='B'
+  N='Snoopy' C='CS101' G='C'
+cn(c,n) :- snap(S,n,A,P),csg(c,S,G)
+ncg(n,c,g) :- snap(S,n,A,P),csg(c,S,g)
+
+Converged after 2 passes through the Rules.
+
+cn
+  C='CS101' N='C. Brown'
+  C='CS101' N='P. Patty'
+  C='CS101' N='Snoopy'
+  C='EE200' N='C. Brown'
+  C='EE200' N='P. Patty'
+
+csg
+  C='CS101' S='12345' G='A'
+  C='CS101' S='22222' G='B'
+  C='CS101' S='33333' G='C'
+  C='EE200' S='12345' G='B+'
+  C='EE200' S='22222' G='B'
+
+ncg
+  N='C. Brown' C='CS101' G='A'
+  N='C. Brown' C='EE200' G='B+'
+  N='P. Patty' C='CS101' G='B'
+  N='P. Patty' C='EE200' G='B'
+  N='Snoopy' C='CS101' G='C'
+
+snap
+  S='12345' N='C. Brown' A='12 Apple St.' P='555-1234'
+  S='22222' N='P. Patty' A='56 Grape Blvd' P='555-9999'
+  S='33333' N='Snoopy' A='12 Apple St.' P='555-1234'
+
+Query Evaluation
+
+cn('CS101',Name)? Yes(3)
+select
+  C='CS101' N='C. Brown'
+  C='CS101' N='P. Patty'
+  C='CS101' N='Snoopy'
+project
+  N='C. Brown'
+  N='P. Patty'
+  N='Snoopy'
+rename
+  Name='C. Brown'
+  Name='P. Patty'
+  Name='Snoopy'
+
+ncg('Snoopy',Course,Grade)? Yes(1)
+select
+  N='Snoopy' C='CS101' G='C'
+project
+  C='CS101' G='C'
+rename
+  Course='CS101' Grade='C'
+
+</pre>
+
+
+ 
+<h3>
+Testing
+</h3>
+
+<p>
+Here are some ideas for tests.
+</p>
+
+<ol>
+<li>
+A rule with no common variable names.
+<li>
+A rule with more than one common variable name.
+<li>
+A rule with variables in the head
+listed in a different order from
+variables in the body.
+</ol>
+
+
+
+<h3>
+New Database Operations
+</h3>
+
+<p>
+Add join and union operations to the
+Relation class from the last project.
+</p>
+
+<h4>
+Join
+</h4>
+
+<p>
+Join must be able to join two relations
+that have no common attribute names.
+</p>
+
+<p>
+Join must be able to join two relations
+that have multiple common attribute names.
+</p>
+
+<p>
+The following pseudo-code describes one way to
+compute the join of relations r1 and r2.
+</p>
+
+<pre>
+	make the scheme s for the result relation
+	    (combine r1's scheme with r2's scheme)
+
+	make a new empty relation r using scheme s
+
+	for each tuple t1 in r1
+	    for each tuple t2 in r2
+
+		if t1 and t2 can join
+		    join t1 and t2 to make tuple t
+		    add tuple t to relation r
+		end if
+
+	    end for
+	end for
+</pre>
+
+<p>
+Note that the following operations used in the join
+should be decomposed into separate routines.
+</p>
+
+<ol type="a">
+<li>
+	combining r1's scheme with r2's scheme
+<li>
+	testing t1 and t2 to see if they can join
+<li>
+	joining t1 and t2
+</ol>
+
+
+<h4>
+Project
+</h4>
+
+<p>
+The project operation from the last project
+may need to be improved to support evaluating rules.
+The project operation needs to be able to
+change the order of the columns in a relation
+to support evaluating rules.
+</p>
+
+<p>
+Test the new database operations before using them
+to evaluate rules as described in the next section.
+</p>
+
+ 
+ 
+<h3>
+Evaluating Rules
+</h3>
+ 
+<p>
+Add rule evaluation to the query interpreter
+from the last project.
+The major steps of the interpreter are:
+</p>
+ 
+<ol>
+<li>
+Process the schemes (same as the last project)
+<li>
+Process the facts (same as the last project)
+<li>
+Evaluate the rules (new code)
+<li>
+Evaluate the queries (same as the last project)
+</ol>
+ 
+<p>
+Evaluate each rule using relational algebra operations as follows:
+</p>
+ 
+<ol>
+<li>
+For each predicate on the right hand side of a rule,
+translate it into a sequence of select, project,
+and rename operations exactly as you did for
+the queries in the last project.
+Each predicate should produce a single relation
+as an intermediate result.
+If there are n predicates on the right hand side of a rule,
+there should be n intermediate results.
+ 
+<li>
+If there is a single predicate on the right hand side of the rule,
+use the single intermediate result from Step 1
+as the result for Step 2.
+If there are two or more predicates on the right-hand side of a rule,
+join the intermediate results to form the single result for Step 2.
+Thus, if p1, p2, and p3 are the intermediate results from Step 1,
+join them (p1 |x| p2 |x| p3) into a single relation.
+ 
+<li>
+The predicates in the body of a rule may have variables
+that are not used in the head of the rule.
+The variables in the head may also appear
+in a different order than those in the body.
+Use a project operation on the result from Step 2
+to remove the columns that don't appear in the head of the rule
+and to reorder the columns to match the order in the head.
+ 
+<li>
+Rename the relation that results from Step 3
+to make it union compatible with the relation
+that matches the head of the rule.
+Rename each attribute in the result from Step 3
+to the attribute name found in the corresponding position
+in the relation that matches the head of the rule.
+ 
+<li>
+Union the result from Step 4 with the relation in the database
+whose name matches the name of the head of the rule.
+</ol>
+ 
+<p>
+Evaluate the rules in the order they are given in the input file. 
+</p>
+
+
+
+<h3>
+The Fixed-Point Algorithm
+</h3>
+ 
+<p>
+Use a fixed-point algorithm to repeatedly evaluate the rules.
+If an iteration over the rules changes the database
+by adding at least one new tuple to at least one relation
+in the database, the algorithm evaluates the rules again.
+If an iteration over the rules does not add a new tuple
+to any relation in the database,
+the fixed-point algorithm terminates.
+</p>
+ 
+<p>
+An easy way to tell if any tuples were added to
+the database is to count the number of tuples in
+the database both before and after evaluating the rules.
+If the two counts are different, something changed,
+and the rules need to be evaluated again.
+</p>
+
+
+
+<h3>
+Output Format
+</h3>
+
+<p>
+The output for this project is composed of the following parts:
+</p>
+
+<ol>
+<li>
+Scheme evaluation output (same as the last project)
+<li>
+Fact evaluation output (same as the last project)
+<li>
+Rule evaluation output (described in the next section)
+<li>
+Query evaluation output (same as the last project)
+</ol>
+
+
+
+<h3>
+Rule Evaluation Output
+</h3>
+
+<p>
+Output a line with the text 'Rule Evaluation'
+followed by a blank line.
+</p>
+
+<p>
+For each rule that is evaluated,
+output the rule followed by the tuples generated by the rule.
+Output the rule in the same form
+that it appears in a Datalog program.
+Output each tuple in the same form as
+in the previous project.
+Output the tuples after the last step of the evaluation of the rule,
+after the attributes have been renamed to be union compatible
+with the relation that matches the head of the rule.
+Only output the tuples that don't already exist
+in the result relation.
+</p>
+
+<p>
+After outputting all the evaluated rules, 
+output a blank line followed by a line with the string,
+</p>
+
+<pre>
+Converged after n passes through the Rules.
+</pre>
+
+<p>
+where n is the number of times
+the fixed-point algorithm evaluated the rules
+before it converged to a solution.
+</p>
+
+<p>
+Finally, output a blank line followed by
+the contents of the relations in the database
+in the same form used in the last project.
+</p>
+
+ 
+ 
+<h3>
+Implementation Requirements
+</h3>
+ 
+<ol>
+<li>
+You are required to use a relational database
+approach in solving the problem in this project.
+You must create tuples in relations and evaluate rules
+and queries using select, project, rename, and join operations.
+ 
+<li>
+Your solution must include the following classes:
+Database, Relation, Scheme, and Tuple.
+
+<li>
+The Relation class must use a set data type
+to hold the tuples in the relation.
+
+<li>
+The select, project, rename, union and join operations
+must be implemented as functions in the Relation class.
+ 
+<li>
+Rules and queries must be evaluated using relational
+operations (select, project, rename, join, and union).
+
+<li>
+The relational operators must not produce relations
+with duplicate tuples or duplicate names in the scheme.
+
+<li>
+The program must run to completion
+with a normal exit status for any input.
+Do not terminate with a non-zero exit status for any input,
+including inputs that have errors.
+</ol>
+
+
+ 
+<h3>
+Assumptions
+</h3>
+
+<p>
+You may assume the following about the datalog input:
+</p>
+
+<ol>
+<li>
+The head of every rule will only contain variable names.
+No strings will be given in the head of any rule.
+
+<li>
+No two variable names in a rule head are the same.
+Each variable in a rule head is unique in that rule head.
+
+<li>
+Every variable name in the head of a rule will appear in
+at least one predicate in the body of the rule.
+</ol>
+
+
+
+</div>
+
+</body>
+</html>
+
+

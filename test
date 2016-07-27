@@ -7,12 +7,12 @@
 using namespace std;
 int main(){
   // Start program:
-  cout << "Program Compiled Successfully." << endl;
+  Debugger debug=Debugger("Main Prog");
+  debug.turned_on=true;
+  debug.output("Program Compiled Successfully.");
 
 
   // Create objects:
-  Debugger debug=Debugger("Main");
-  debug.turned_on=true;
   Scanner scanner=Scanner();
   Parser parser=Parser();
   Database database=Database();
@@ -162,6 +162,7 @@ int main(){
   parser.output_file("./test_cases/output23.txt");
   parser.read_in(scanner.get_tokens());
   parser.build();
+  parser.write_out();
   scanner.clear_tokens();
   parser.clear();
 
@@ -175,10 +176,8 @@ int main(){
   parser.read_in(scanner.get_tokens());
   parser.build();
   parser.write_out();
-  database.read_in(parser.build_objects());
   scanner.clear_tokens();
   parser.clear();
-  database.clear();
 
   scanner.input_file("./test_cases/in25.txt");
   scanner.output_file("./test_cases/output25.txt");
@@ -246,7 +245,6 @@ int main(){
   parser.write_out();
   scanner.clear_tokens();
   parser.clear();
-*/
 
   scanner.input_file("./test_cases/in30.txt");
   scanner.output_file("./test_cases/output30.txt");
@@ -342,12 +340,113 @@ int main(){
   scanner.clear_tokens();
   parser.clear();
   database.clear();
+  */
+
+  scanner.input_file("./test_cases/in40.txt");
+  scanner.output_file("./test_cases/output40.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(29, "Test 40 output:");
+  //scanner.print();
+  parser.output_file("./test_cases/output40.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
+  database.read_in(parser.build_objects());
+  database.build_database();
+  database.output_file("./test_cases/output40.txt");
+  database.apply_rules();
+  database.apply_queries();
+  database.write_out();
+  scanner.clear_tokens();
+  parser.clear();
+  database.clear();
+
+  scanner.input_file("./test_cases/in44.txt");
+  scanner.output_file("./test_cases/output44.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(30, "Test 44 output:");
+  //scanner.print();
+  parser.output_file("./test_cases/output44.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
+  database.read_in(parser.build_objects());
+  database.build_database();
+  database.output_file("./test_cases/output44.txt");
+  database.apply_rules();
+  database.apply_queries();
+  database.write_out();
+  scanner.clear_tokens();
+  parser.clear();
+  database.clear();
+
+  scanner.input_file("./test_cases/in45.txt");
+  scanner.output_file("./test_cases/output45.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(31, "Test 45 output:");
+  //scanner.print();
+  parser.output_file("./test_cases/output45.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
+  database.read_in(parser.build_objects());
+  database.build_database();
+  database.output_file("./test_cases/output45.txt");
+  database.apply_rules();
+  database.apply_queries();
+  database.write_out();
+  scanner.clear_tokens();
+  parser.clear();
+  database.clear();
+
+  scanner.input_file("./test_cases/in46.txt");
+  scanner.output_file("./test_cases/output46.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(32, "Test 46 output:");
+  //scanner.print();
+  parser.output_file("./test_cases/output46.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
+  database.read_in(parser.build_objects());
+  database.build_database();
+  database.output_file("./test_cases/output46.txt");
+  database.apply_rules();
+  database.apply_queries();
+  database.write_out();
+  scanner.clear_tokens();
+  parser.clear();
+  database.clear();
+
+  scanner.input_file("./test_cases/in49.txt");
+  scanner.output_file("./test_cases/output49.txt");
+  scanner.read_in();
+  scanner.write_out();
+  //debug.output(33, "Test 49 output:");
+  //scanner.print();
+  parser.output_file("./test_cases/output49.txt");
+  parser.read_in(scanner.get_tokens());
+  parser.build();
+  parser.write_out();
+  database.read_in(parser.build_objects());
+  database.build_database();
+  database.output_file("./test_cases/output49.txt");
+  database.apply_rules();
+  database.apply_queries();
+  database.write_out();
+  scanner.clear_tokens();
+  parser.clear();
+  database.clear();
 
   scanner.input_file("./test_cases/in61.txt");
   scanner.output_file("./test_cases/output61.txt");
   scanner.read_in();
   scanner.write_out();
-  //debug.output(29, "Test 61 output:");
+  //debug.output(34, "Test 61 output:");
   //scanner.print();
   parser.output_file("./test_cases/output61.txt");
   parser.read_in(scanner.get_tokens());
@@ -356,6 +455,7 @@ int main(){
   database.read_in(parser.build_objects());
   database.build_database();
   database.output_file("./test_cases/output61.txt");
+  database.apply_rules();
   database.apply_queries();
   database.write_out();
   scanner.clear_tokens();
@@ -366,7 +466,7 @@ int main(){
   scanner.output_file("./test_cases/output62.txt");
   scanner.read_in();
   scanner.write_out();
-  //debug.output(30, "Test 62 output:");
+  //debug.output(35, "Test 62 output:");
   //scanner.print();
   parser.output_file("./test_cases/output62.txt");
   parser.read_in(scanner.get_tokens());
@@ -375,6 +475,7 @@ int main(){
   database.read_in(parser.build_objects());
   database.build_database();
   database.output_file("./test_cases/output62.txt");
+  database.apply_rules();
   database.apply_queries();
   database.write_out();
   scanner.clear_tokens();
@@ -385,7 +486,7 @@ int main(){
   scanner.output_file("./output.txt");
   scanner.read_in();
   scanner.write_out();
-  //debug.output(31, "Test input output:");
+  //debug.output(36, "Test input output:");
   //scanner.print();
   parser.output_file("./output.txt");
   parser.read_in(scanner.get_tokens());
@@ -394,6 +495,7 @@ int main(){
   database.read_in(parser.build_objects());
   database.build_database();
   database.output_file("./output.txt");
+  database.apply_rules();
   database.apply_queries();
   database.write_out();
   scanner.clear_tokens();
@@ -403,6 +505,6 @@ int main(){
 
   // Finish program:
   debug.flag(32);
-  cout << "Program Finished Successfully." << endl;
+  debug.output("Program Finished Successfully.");
   return 0;
 }

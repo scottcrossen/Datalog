@@ -79,10 +79,10 @@ class Rule : public AbstractObject{
   Rule(Predicate rule){
     this->rule=rule;
   }
+  ~Rule(){}
   void add_predicate(Parameter predicate){
     predicates.push_back(predicate);
   }
-  ~Rule(){}
   string toString(){
     stringstream output;
     output << rule.toString() << " :- ";
@@ -90,6 +90,12 @@ class Rule : public AbstractObject{
       output << predicates[iter].toString() <<",";
     output << predicates[predicates.size()-1].toString();
     return output.str();
+  }
+  Predicate return_rule() const{
+    return rule;
+  }
+  vector<Predicate> return_predicates() const{
+    return predicates;
   }
  private:
   Predicate rule;
