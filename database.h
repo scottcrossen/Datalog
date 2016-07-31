@@ -1,5 +1,6 @@
 #include "parserclasses.h"
 #include "databaseclasses.h"
+#include "rule_graph.h"
 #include <vector>
 #include <set>
 #pragma once
@@ -112,18 +113,22 @@ class Database{
     debug.flag(37);
     current_output+="Rule Evaluation\n\n";
     stringstream output;
-    vector<Rule> rules=program.return_rules();
+    //vector<Rule> rules=program.return_rules();
     unsigned converge_step=0;
     bool converged=false;
-    while(!(converged) && converge_step<30){
+    RuleGraph graph=RuleGraph(program.return_rules());
+    output<< graph.build();
+    vector<GraphNode> rules=graph.return_reverse_list();
+    while(!(converged) && converge_step<1){
       converge_step++;
       converged=true;
-      for(vector<Rule>::iterator iter1=rules.begin(); iter1 !=rules.end(); iter1++){
-	debug.output("Applying rule: "+(*iter1).toString());
-	if((*iter1).return_predicates().size() !=0)
-	  //debug.output("This rule has ID: "+(*iter1).return_rule().return_ID());
+      for(vector<GraphNode>::iterator iter1=rules.begin(); iter1 !=rules.end(); iter1++){
+	debug.output("Applying rule: "+(*iter1).rule.toString());
+	output<<endl<<"SCC: R"<<(*iter1).rule_num <<endl;
+	if((*iter1).rule.return_predicates().size() !=0)
+	  //debug.output("This rule has ID: "+(*iter1).rule.return_rule().return_ID());
 	  for(set<RelationNode>::iterator iter2=relations.begin(); iter2 !=relations.end(); iter2++){
-	    if((*iter2).node.return_ID()==(*iter1).return_rule().return_ID()){
+	    if((*iter2).node.return_ID()==(*iter1).rule.return_rule().return_ID()){
 	      RelationNode rule_join=RelationNode();
 	      apply_current_rule(output, converged, iter1, iter2, rule_join);
 	      print_new_tuples(output, converged, iter1, iter2, rule_join);
@@ -134,7 +139,8 @@ class Database{
 	  }
       }
     }
-    output << endl <<"Converged after " << converge_step << " passes through the Rules." << endl <<endl;
+    //output << endl <<"Converged after " << converge_step << " passes through the Rules." << endl <<endl;
+    output << endl << "Rule Evaluation Complete" <<endl << endl;
     current_output+=output.str();
     display_database();
     stringstream debug_output;
@@ -155,14 +161,14 @@ class Database{
     debug.output(22,"Output file written.");
   }
  private:
-  void print_new_tuples(stringstream &output, bool &converged, vector<Rule>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join){
+  void print_new_tuples(stringstream &output, bool &converged, vector<GraphNode>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join){
     for(set<vector<Parameter>>::iterator iter3=rule_join.tuples.begin(); iter3 !=rule_join.tuples.end(); iter3++)
-      debug.output("Added "+vec_to_string(*iter3)+" with type "+rule_join.node.return_ID()+vec_to_string(rule_join.columns)+" to relation "+(*iter2).node.return_ID()+vec_to_string((*iter1).return_rule().return_parameter_list()));
+      debug.output("Added "+vec_to_string(*iter3)+" with type "+rule_join.node.return_ID()+vec_to_string(rule_join.columns)+" to relation "+(*iter2).node.return_ID()+vec_to_string((*iter1).rule.return_rule().return_parameter_list()));
     //(*iter2).u(rule_join);
     RelationNode temporary=(*iter2);
-    if((*iter2).uni((*iter1).return_rule().return_parameter_list(),rule_join))
+    if((*iter2).uni((*iter1).rule.return_rule().return_parameter_list(),rule_join))
       converged=false;
-    output<< (*iter1).toString() <<endl;
+    output<< (*iter1).rule.toString() <<endl;
     for(set<vector<Parameter>>::iterator iter3=(*iter2).tuples.begin(); iter3 != (*iter2).tuples.end(); iter3++){
       bool found_match=false;
       for(set<vector<Parameter>>::iterator iter4=temporary.tuples.begin(); iter4 != temporary.tuples.end(); iter4++)
@@ -175,12 +181,12 @@ class Database{
       }
     }
   }
-  void apply_current_rule(stringstream &output, bool &converged, vector<Rule>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join){
+  void apply_current_rule(stringstream &output, bool &converged, vector<GraphNode>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join){
     //debug.output("Found matching relation");	      
-    debug.output("Attempting to join relation "+(*iter1).return_predicates()[0].toString());
+    debug.output("Attempting to join relation "+(*iter1).rule.return_predicates()[0].toString());
     for(set<RelationNode>::iterator iter3=relations.begin(); iter3 !=relations.end(); iter3++){
-      if((*iter3).node.return_ID()==(*iter1).return_predicates()[0].return_ID()){
-	rule_join=(*iter3).sigma((*iter1).return_predicates()[0].return_parameter_list());
+      if((*iter3).node.return_ID()==(*iter1).rule.return_predicates()[0].return_ID()){
+	rule_join=(*iter3).sigma((*iter1).rule.return_predicates()[0].return_parameter_list());
 	stringstream debug_output;
 	debug_output <<"Found matching relation with tuple size "<<(*iter3).tuples.size();
 	debug_output << ". Current join has tuple size "<< rule_join.tuples.size() << " and ID "<<rule_join.node.return_ID();
@@ -188,11 +194,11 @@ class Database{
 	break;
       }
     }
-    for(unsigned iter3=1; iter3 <(*iter1).return_predicates().size();iter3++){
-      debug.output("Attempting to join relation "+(*iter1).return_predicates()[iter3].toString());
+    for(unsigned iter3=1; iter3 <(*iter1).rule.return_predicates().size();iter3++){
+      debug.output("Attempting to join relation "+(*iter1).rule.return_predicates()[iter3].toString());
       for(set<RelationNode>::iterator iter4=relations.begin(); iter4 !=relations.end(); iter4++){
-	if((*iter4).node.return_ID()==(*iter1).return_predicates()[iter3].return_ID()){
-	  rule_join=rule_join.x((*iter4).sigma((*iter1).return_predicates()[iter3].return_parameter_list()));
+	if((*iter4).node.return_ID()==(*iter1).rule.return_predicates()[iter3].return_ID()){
+	  rule_join=rule_join.x((*iter4).sigma((*iter1).rule.return_predicates()[iter3].return_parameter_list()));
 	  stringstream debug_output;
 	  debug_output <<"Found matching relation with tuple size "<<(*iter4).tuples.size();
 	  debug_output << ". Current join has tuple size "<< rule_join.tuples.size()<<" and ID "<< rule_join.node.return_ID();
