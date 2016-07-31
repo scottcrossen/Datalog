@@ -115,10 +115,33 @@ class Database{
     stringstream output;
     //vector<Rule> rules=program.return_rules();
     unsigned converge_step=0;
-    bool converged=false;
     RuleGraph graph=RuleGraph(program.return_rules());
     output<< graph.build();
     vector<GraphNode> rules=graph.return_reverse_list();
+    for(vector<GraphNode>::iterator iter1=rules.begin(); iter1 !=rules.end(); iter1++){
+      bool converged=false;
+      debug.output("Applying rule: "+(*iter1).rule.toString());
+      output<<endl<<"SCC: R"<<(*iter1).rule_num <<endl;
+      while(!(converged) && converge_step<30){
+	converge_step++;
+	converged=true;
+	bool need_converged=false;
+	if((*iter1).rule.return_predicates().size() !=0)
+	  //debug.output("This rule has ID: "+(*iter1).rule.return_rule().return_ID());
+	  for(set<RelationNode>::iterator iter2=relations.begin(); iter2 !=relations.end(); iter2++){
+	    if((*iter2).node.return_ID()==(*iter1).rule.return_rule().return_ID()){
+	      RelationNode rule_join=RelationNode();
+	      apply_current_rule(output, converged, iter1, iter2, rule_join, need_converged);
+	      print_new_tuples(output, converged, iter1, iter2, rule_join);
+	      //debug.output(output.str());
+	      //output << endl;
+	      break;
+	    }
+	  }
+	if(!(need_converged)) converged=true;
+      }
+    }
+      /*
     while(!(converged) && converge_step<1){
       converge_step++;
       converged=true;
@@ -138,7 +161,8 @@ class Database{
 	    }
 	  }
       }
-    }
+      }
+      */
     //output << endl <<"Converged after " << converge_step << " passes through the Rules." << endl <<endl;
     output << endl << "Rule Evaluation Complete" <<endl << endl;
     current_output+=output.str();
@@ -181,8 +205,10 @@ class Database{
       }
     }
   }
-  void apply_current_rule(stringstream &output, bool &converged, vector<GraphNode>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join){
+  void apply_current_rule(stringstream &output, bool &converged, vector<GraphNode>::iterator &iter1, set<RelationNode>::iterator &iter2, RelationNode &rule_join, bool &need_converged){
     //debug.output("Found matching relation");	      
+    if ((*iter1).rule.return_rule().return_parameter().return_ID()==(*iter1).rule.return_predicates()[0].return_parameter().return_ID())
+      need_converged=true;
     debug.output("Attempting to join relation "+(*iter1).rule.return_predicates()[0].toString());
     for(set<RelationNode>::iterator iter3=relations.begin(); iter3 !=relations.end(); iter3++){
       if((*iter3).node.return_ID()==(*iter1).rule.return_predicates()[0].return_ID()){
@@ -195,6 +221,8 @@ class Database{
       }
     }
     for(unsigned iter3=1; iter3 <(*iter1).rule.return_predicates().size();iter3++){
+      if ((*iter1).rule.return_rule().return_parameter().return_ID()==(*iter1).rule.return_predicates()[iter3].return_parameter().return_ID())
+	need_converged=true;
       debug.output("Attempting to join relation "+(*iter1).rule.return_predicates()[iter3].toString());
       for(set<RelationNode>::iterator iter4=relations.begin(); iter4 !=relations.end(); iter4++){
 	if((*iter4).node.return_ID()==(*iter1).rule.return_predicates()[iter3].return_ID()){

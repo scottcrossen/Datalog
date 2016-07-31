@@ -41,10 +41,12 @@ Ancestor(x,y) :- Parent(x,y)
 SCC: R1
 Ancestor(x,y) :- Ancestor(x,z),Parent(z,y)
   x='jim' y='ned'
+Ancestor(x,y) :- Ancestor(x,z),Parent(z,y)
 
 SCC: R0
 Sibling(x,y) :- Sibling(y,x)
   a='ned' b='sue'
+Sibling(x,y) :- Sibling(y,x)
 
 Rule Evaluation Complete
 
