@@ -177,13 +177,19 @@ vector<Predicate> current_predicates=rules[iter1].return_predicates();
     return output;
   }
   void sort_reverse_post_order(){
-    vector<GraphNode*> output;
+    vector<GraphNode*> output_reverse;
+    vector<GraphNode*> output_forward;
     for(unsigned iter1=reverse_rule_graph.size(); iter1>0; iter1--)
       for(unsigned iter2=0; iter2<reverse_rule_graph.size(); iter2++)
-	if(reverse_rule_graph[iter2]->postfix==iter1)
-	  output.push_back(reverse_rule_graph[iter2]);
-    if(output.size() == reverse_rule_graph.size())
-      reverse_rule_graph=output;
+	if(reverse_rule_graph[iter2]->postfix==iter1){
+	  output_reverse.push_back(reverse_rule_graph[iter2]);
+	  output_forward.push_back(rule_graph[iter2]);
+	  output_forward[output_forward.size()-1]->postfix=output_reverse[output_reverse.size()-1]->postfix;
+	}
+    if(output_reverse.size() == reverse_rule_graph.size())
+      reverse_rule_graph=output_reverse;
+    if(output_forward.size() == rule_graph.size())
+      rule_graph=output_forward;
   }
   string display_reverse_order(){
     stringstream output;
@@ -205,5 +211,20 @@ vector<Predicate> current_predicates=rules[iter1].return_predicates();
     sort_reverse_post_order();
     output << display_reverse_order();
     return output.str();
+  }
+  vector<unsigned> find_this_group(unsigned index, bool &found_loop){
+    vector<unsigned> output;
+    if (!(rule_graph[index]->visited)){
+      rule_graph[index]->visited=true;
+      output.push_back(rule_graph.size()-rule_graph[index]->postfix);
+      for(set<GraphNode*>::iterator iter1=rule_graph[index]->children.begin(); iter1 != rule_graph[index]->children.end(); iter1++){
+	if(index==rule_graph.size()-(*iter1)->postfix) found_loop=true;
+	vector<unsigned> temporary=find_this_group(rule_graph.size()-(*iter1)->postfix,found_loop);
+	for(unsigned iter2=0; iter2 <temporary.size(); iter2++)
+	  output.push_back(temporary[iter2]);
+      }
+    }
+    if(output.size() >1) found_loop=true;
+    return output;
   }
 };

@@ -33,16 +33,15 @@ SCC Search Order
   R2
   R1
 
-SCC: R0
+SCC: R0 R1 R2
 bob(x) :- bob(x)
-
-SCC: R2
-jim(x) :- bob(x)
-  x='1'
-
-SCC: R1
 bob(x) :- jim(x)
   x='2'
+jim(x) :- bob(x)
+  x='1'
+bob(x) :- bob(x)
+bob(x) :- jim(x)
+jim(x) :- bob(x)
 
 Rule Evaluation Complete
 
