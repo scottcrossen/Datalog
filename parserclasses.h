@@ -32,6 +32,9 @@ class Parameter : public AbstractObject{
     if(this->ID== second.return_ID()) return true;
     else return false;
   }
+  void operator=(const Parameter& second){
+    this->ID=second.ID;
+  }
  private:
   string ID;
 };
@@ -63,6 +66,13 @@ class Predicate : public AbstractObject{
   }
   vector<Parameter> return_parameter_list() const{
     return parameter_list;
+  }
+  Parameter return_parameter(){
+    return ID;
+  }
+  void operator=(const Predicate& second){
+    this->ID=second.ID;
+    this->parameter_list=second.parameter_list;
   }
  private:
   Parameter ID;
@@ -96,6 +106,10 @@ class Rule : public AbstractObject{
   }
   vector<Predicate> return_predicates() const{
     return predicates;
+  }
+  void operator=(const Rule& second){
+    this->rule=second.rule;
+    this->predicates=second.predicates;
   }
  private:
   Predicate rule;
