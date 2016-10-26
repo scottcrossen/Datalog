@@ -6,7 +6,7 @@
 ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚══════╝ ╚═════╝  ╚═════╝ 
                                                            
  
-BYU CS 236 project
+BYU CS 236 Project
 OWNER: Scott Leland Crossen
 CONTRIBUTERS:  Scott Leland Crossen
 
